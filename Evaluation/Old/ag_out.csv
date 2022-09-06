@@ -1,0 +1,241 @@
+"","Group","mod","dif","SE"
+"1","CG Asian men","dif_OLS",-0.286492297708499,0.0180427855995452
+"2","CG Asian men","dif_OLS_int",8.93688132563852e-05,0.0132897035272162
+"3","CG Asian men","dif_OLS_real",-0.328777049427231,0.0133333333333351
+"4","CG Asian men","dif_OLS_int_real",0.0369797073331952,0.0135897435897447
+"5","CG Asian men","dif_OLS_small",-0.397910240149294,0.0778750951853038
+"6","CG Asian men","dif_OLS_int_small",-0.122145139114693,0.0566199990980824
+"7","CG Asian men","dif_MLM",0,0.0582051282051292
+"8","CG Asian men","dif_MLM_int",0,0.0569230769230773
+"9","CG Asian men","dif_MLM_real",0.0360000000000014,0.181917551115992
+"10","CG Asian men","dif_MLM_int_real",0.0360000000000014,0.120037651793049
+"11","CG Asian men","dif_MLM_small",-0.122999999999998,0.122307692307693
+"12","CG Asian men","dif_MLM_int_small",-0.122,0.125384615384615
+"13","CG Asian women","dif_OLS",-1.00253806916366,0.0193087310703529
+"14","CG Asian women","dif_OLS_int",0.0427875376525577,0.0176206612319084
+"15","CG Asian women","dif_OLS_real",-1.08026699486856,0.0171794871794872
+"16","CG Asian women","dif_OLS_int_real",0.129512396898114,0.017948717948718
+"17","CG Asian women","dif_OLS_small",-0.770343039946283,0.084957095865654
+"18","CG Asian women","dif_OLS_int_small",-0.15621602110879,0.0820900330374368
+"19","CG Asian women","dif_MLM",0.0429999999999993,0.0846153846153842
+"20","CG Asian women","dif_MLM_int",0.0429999999999993,0.0825641025641033
+"21","CG Asian women","dif_MLM_real",0.131999999999998,0.196622392692575
+"22","CG Asian women","dif_MLM_int_real",0.131999999999998,0.169758875161148
+"23","CG Asian women","dif_MLM_small",-0.154000000000003,0.173076923076924
+"24","CG Asian women","dif_MLM_int_small",-0.152999999999999,0.174871794871795
+"25","FG Asian men","dif_OLS",-3.82898574939976,0.0268079379585715
+"26","FG Asian men","dif_OLS_int",-2.99323025536869,0.0206134072739099
+"27","FG Asian men","dif_OLS_real",-3.76631495430642,0.0202564102564104
+"28","FG Asian men","dif_OLS_int_real",-2.99959090214264,0.0202564102564104
+"29","FG Asian men","dif_OLS_small",-3.67589316338625,0.119976263646293
+"30","FG Asian men","dif_OLS_int_small",-3.14506297991831,0.0908570171588697
+"31","FG Asian men","dif_MLM",-2.993,0.0910256410256402
+"32","FG Asian men","dif_MLM_int",-2.994,0.0910256410256402
+"33","FG Asian men","dif_MLM_real",-2.999,0.28587230484931
+"34","FG Asian men","dif_MLM_int_real",-3.001,0.212804011997546
+"35","FG Asian men","dif_MLM_small",-3.149,0.213333333333334
+"36","FG Asian men","dif_MLM_int_small",-3.142,0.214102564102564
+"37","FG Asian women","dif_OLS",-7.54503152085493,0.0276225038926446
+"38","FG Asian women","dif_OLS_int",-7.9723789340126,0.0269160046301313
+"39","FG Asian women","dif_OLS_real",-7.51780489974776,0.0274358974358973
+"40","FG Asian women","dif_OLS_int_real",-8.1453028490202,0.0274358974358973
+"41","FG Asian women","dif_OLS_small",-7.04832596318323,0.12362894024145
+"42","FG Asian women","dif_OLS_int_small",-7.88865051142206,0.123450376703844
+"43","FG Asian women","dif_MLM",-7.973,0.122051282051282
+"44","FG Asian women","dif_MLM_int",-7.972,0.123589743589743
+"45","FG Asian women","dif_MLM_real",-8.138,0.291842905971169
+"46","FG Asian women","dif_MLM_int_real",-8.15,0.270469178958924
+"47","FG Asian women","dif_MLM_small",-7.854,0.271282051282051
+"48","FG Asian women","dif_MLM_int_small",-7.884,0.271025641025641
+"49","CG Black men","dif_OLS",-3.22987016524218,0.024122645835528
+"50","CG Black men","dif_OLS_int",-4.01617131379994,0.0182478032854825
+"51","CG Black men","dif_OLS_real",-3.21488741293305,0.017948717948718
+"52","CG Black men","dif_OLS_int_real",-3.87944418665488,0.0187179487179488
+"53","CG Black men","dif_OLS_small",-3.2891471684671,0.10768816128194
+"54","CG Black men","dif_OLS_int_small",-4.43884441580458,0.081537231913977
+"55","CG Black men","dif_MLM",-4.016,0.0815384615384628
+"56","CG Black men","dif_MLM_int",-4.016,0.081538461538461
+"57","CG Black men","dif_MLM_real",-3.881,0.255300625582275
+"58","CG Black men","dif_MLM_int_real",-3.878,0.187675497914104
+"59","CG Black men","dif_MLM_small",-4.434,0.186666666666667
+"60","CG Black men","dif_MLM_int_small",-4.438,0.190769230769231
+"61","CG Black women","dif_OLS",-1.94591593669735,0.0251062087883891
+"62","CG Black women","dif_OLS_int",-0.998092550233491,0.0246272921790534
+"63","CG Black women","dif_OLS_real",-1.96637735837438,0.0248717948717952
+"64","CG Black women","dif_OLS_int_real",-1.10946393249248,0.0246153846153846
+"65","CG Black women","dif_OLS_small",-1.66157996826409,0.1119733465283
+"66","CG Black women","dif_OLS_int_small",-0.702416421966134,0.109247133790576
+"67","CG Black women","dif_MLM",-0.998000000000001,0.10948717948718
+"68","CG Black women","dif_MLM_int",-0.998000000000001,0.107948717948718
+"69","CG Black women","dif_MLM_real",-1.106,0.2599803183227
+"70","CG Black women","dif_MLM_int_real",-1.108,0.203341274277174
+"71","CG Black women","dif_MLM_small",-0.689,0.201794871794872
+"72","CG Black women","dif_MLM_int_small",-0.696999999999999,0.200512820512821
+"73","FG Black men","dif_OLS",4.49252590301786,0.0464861739503026
+"74","FG Black men","dif_OLS_int",3.01265044823798,0.0365146001593725
+"75","FG Black men","dif_OLS_real",4.59824956440438,0.0164102564102564
+"76","FG Black men","dif_OLS_int_real",3.04052702559348,0.0158974358974353
+"77","FG Black men","dif_OLS_small",4.97366025571265,0.203061840636215
+"78","FG Black men","dif_OLS_int_small",2.41202870859631,0.155737078547869
+"79","FG Black men","dif_MLM",11.013,0.0625641025641025
+"80","FG Black men","dif_MLM_int",11.013,0.0641025641025641
+"81","FG Black men","dif_MLM_real",10.985,0.469972397774536
+"82","FG Black men","dif_MLM_int_real",10.985,0.351878392476446
+"83","FG Black men","dif_MLM_small",10.645,0.166153846153845
+"84","FG Black men","dif_MLM_int_small",10.64,0.164615384615384
+"85","FG Black women","dif_OLS",-1.2235198684373,0.0469909650849087
+"86","FG Black women","dif_OLS_int",-0.0694821213866881,0.0486314861230633
+"87","FG Black women","dif_OLS_real",-1.15324038103694,0.0215384615384605
+"88","FG Black women","dif_OLS_int_real",-0.207970296418463,0.0215384615384624
+"89","FG Black women","dif_OLS_small",-0.398772544084338,0.204502577352403
+"90","FG Black women","dif_OLS_int_small",0.737049869506158,0.221660535326889
+"91","FG Black women","dif_MLM",11.017,0.0953846153846154
+"92","FG Black women","dif_MLM_int",11.018,0.0948717948717942
+"93","FG Black women","dif_MLM_real",11.065,0.467244032550274
+"94","FG Black women","dif_MLM_int_real",11.074,0.435163191418127
+"95","FG Black women","dif_MLM_small",11.157,0.160000000000001
+"96","FG Black women","dif_MLM_int_small",11.17,0.162820512820512
+"97","CG Hispanic men","dif_OLS",11.1260756199363,0.0104021703604309
+"98","CG Hispanic men","dif_OLS_int",12.0155463345285,0.00624388826515122
+"99","CG Hispanic men","dif_OLS_real",11.1146181360954,0.00641025641025605
+"100","CG Hispanic men","dif_OLS_int_real",12.0096897907409,0.00615384615384639
+"101","CG Hispanic men","dif_OLS_small",10.9992558920059,0.0454822930370456
+"102","CG Hispanic men","dif_OLS_int_small",11.968763395491,0.028072523817944
+"103","CG Hispanic men","dif_MLM",12.016,0.0287179487179474
+"104","CG Hispanic men","dif_MLM_int",12.016,0.0282051282051281
+"105","CG Hispanic men","dif_MLM_real",12.009,0.114511507773041
+"106","CG Hispanic men","dif_MLM_int_real",12.009,0.0615534781242489
+"107","CG Hispanic men","dif_MLM_small",11.967,0.063589743589743
+"108","CG Hispanic men","dif_MLM_int_small",11.969,0.0620512820512832
+"109","CG Hispanic women","dif_OLS",9.41002984848112,0.0124611098999901
+"110","CG Hispanic women","dif_OLS_int",6.99599543287715,0.00831089600217713
+"111","CG Hispanic women","dif_OLS_real",9.36312819065405,0.00871794871794844
+"112","CG Hispanic women","dif_OLS_int_real",7.08875797457647,0.00820512820512912
+"113","CG Hispanic women","dif_OLS_small",9.62682309220895,0.0541839970669739
+"114","CG Hispanic women","dif_OLS_int_small",6.95692440083029,0.0363186025272875
+"115","CG Hispanic women","dif_MLM",6.996,0.0366666666666668
+"116","CG Hispanic women","dif_MLM_int",6.996,0.0374358974358976
+"117","CG Hispanic women","dif_MLM_real",7.09,0.134889567559486
+"118","CG Hispanic women","dif_MLM_int_real",7.089,0.0839310342094113
+"119","CG Hispanic women","dif_MLM_small",6.963,0.084102564102563
+"120","CG Hispanic women","dif_MLM_int_small",6.958,0.0830769230769244
+"121","FG Hispanic men","dif_OLS",10.3089477830274,0.0192724986886667
+"122","FG Hispanic men","dif_OLS_int",8.00547251991378,0.0174803842938129
+"123","FG Hispanic men","dif_OLS_real",10.2943100803953,0.017948717948718
+"124","FG Hispanic men","dif_OLS_int_real",7.98751381446968,0.0169230769230757
+"125","FG Hispanic men","dif_OLS_small",10.1838210818906,0.0836673610553847
+"126","FG Hispanic men","dif_OLS_int_small",8.19399912473804,0.0761116334654364
+"127","FG Hispanic men","dif_MLM",8.005,0.0761538461538472
+"128","FG Hispanic men","dif_MLM_int",8.005,0.0779487179487185
+"129","FG Hispanic men","dif_MLM_real",7.989,0.196341693241379
+"130","FG Hispanic men","dif_MLM_int_real",7.987,0.167243789822917
+"131","FG Hispanic men","dif_MLM_small",8.203,0.171794871794872
+"132","FG Hispanic men","dif_MLM_int_small",8.193,0.167435897435899
+"133","FG Hispanic women","dif_OLS",5.59290201157226,0.0204812064129669
+"134","FG Hispanic women","dif_OLS_int",7.01422977220362,0.0236062412228567
+"135","FG Hispanic women","dif_OLS_real",5.54282013495401,0.0238461538461547
+"136","FG Hispanic women","dif_OLS_int_real",6.82190350587518,7.05358974358974
+"137","FG Hispanic women","dif_OLS_small",5.81138828209365,0.0905332809876488
+"138","FG Hispanic women","dif_OLS_int_small",7.09588451344371,0.110587639567882
+"139","FG Hispanic women","dif_MLM",7.014,0.109487179487179
+"140","FG Hispanic women","dif_MLM_int",9.139,8.28641025641026
+"141","FG Hispanic women","dif_MLM_real",6.824,0.208620032322418
+"142","FG Hispanic women","dif_MLM_int_real",5.591,0.212804011997546
+"143","FG Hispanic women","dif_MLM_small",7.09,0.213076923076924
+"144","FG Hispanic women","dif_MLM_int_small",4.744,13.2089743589744
+"145","CG White men","dif_OLS",-9.23354566866384,0.0276960129193316
+"146","CG White men","dif_OLS_int",-12.0175650380403,0.0276557879474107
+"147","CG White men","dif_OLS_real",-9.14322782448385,0.0282051282051281
+"148","CG White men","dif_OLS_int_real",-11.8864034844151,9.56846153846154
+"149","CG White men","dif_OLS_small",-9.09416184134631,0.124503391345941
+"150","CG White men","dif_OLS_int_small",-11.8914931907421,0.133001054509841
+"151","CG White men","dif_MLM",-12.017,0.132564102564102
+"152","CG White men","dif_MLM_int",-12.864,7.6925641025641
+"153","CG White men","dif_MLM_real",-11.878,0.293041739520384
+"154","CG White men","dif_MLM_int_real",-11.266,0.281513246871157
+"155","CG White men","dif_MLM_small",-11.861,0.287179487179488
+"156","CG White men","dif_MLM_int_small",-10.053,14.5458974358974
+"157","CG White women","dif_OLS",-5.949591440119,0.028498630535627
+"158","CG White women","dif_OLS_int",-2.94515722226017,0.0364290804286053
+"159","CG White women","dif_OLS_real",-5.89471776992518,0.035897435897436
+"160","CG White women","dif_OLS_int_real",-2.96905155851934,0.0361538461538457
+"161","CG White women","dif_OLS_small",-5.4665946411433,0.128194287922475
+"162","CG White women","dif_OLS_int_small",-2.1714416768998,0.168234505382122
+"163","CG White women","dif_MLM",-2.945,0.167948717948717
+"164","CG White women","dif_MLM_int",-2.945,0.166410256410256
+"165","CG White women","dif_MLM_real",-2.978,0.297873556503717
+"166","CG White women","dif_MLM_int_real",-2.966,0.308382311095706
+"167","CG White women","dif_MLM_small",-2.2,0.31025641025641
+"168","CG White women","dif_MLM_int_small",-2.17,0.312051282051282
+"169","FG White men","dif_OLS",-10.6344300845063,0.0250821820013193
+"170","FG White men","dif_OLS_int",-12.0224424841742,0.024457624824084
+"171","FG White men","dif_OLS_real",-10.5918002831105,0.0238461538461547
+"172","FG White men","dif_OLS_int_real",-11.9389249844954,10.0148717948718
+"173","FG White men","dif_OLS_small",-10.7074158464272,0.112661662840264
+"174","FG White men","dif_OLS_int_small",-11.5781284256575,0.114926046252412
+"175","FG White men","dif_MLM",-12.023,0.112307692307691
+"176","FG White men","dif_MLM_int",-12.21,8.02615384615385
+"177","FG White men","dif_MLM_real",-11.937,0.269863121000339
+"178","FG White men","dif_MLM_int_real",-13.636,0.270469178958924
+"179","FG White men","dif_MLM_small",-11.585,0.276666666666667
+"180","FG White men","dif_MLM_int_small",-13.762,13.4669230769231
+"181","FG White women","dif_OLS",-11.3504758559614,0.0260442154544348
+"182","FG White women","dif_OLS_int",-8.02120369036312,0.0326654682653793
+"183","FG White women","dif_OLS_real",-11.3432902285518,0.0325641025641032
+"184","FG White women","dif_OLS_int_real",-8.12005279004619,0.0330769230769234
+"185","FG White women","dif_OLS_small",-11.0798486462242,0.116947896513813
+"186","FG White women","dif_OLS_int_small",-8.50023519864532,0.15736896994332
+"187","FG White women","dif_MLM",-8.021,0.156153846153847
+"188","FG White women","dif_MLM_int",-8.021,0.153333333333333
+"189","FG White women","dif_MLM_real",-8.129,0.273209348386391
+"190","FG White women","dif_MLM_int_real",-8.121,0.344781905334243
+"191","FG White women","dif_MLM_small",-8.539,0.337435897435897
+"192","FG White women","dif_MLM_int_small",-8.508,0.353846153846154
+"193","CG White Hispanic men","dif_OLS",-6.91203401624622,0.0469695714170905
+"194","CG White Hispanic men","dif_OLS_int",-8.03413618228674,0.0482054974460771
+"195","CG White Hispanic men","dif_OLS_real",-6.77866330577305,0.0210256410256412
+"196","CG White Hispanic men","dif_OLS_int_real",-7.94825357769584,0.0205128205128201
+"197","CG White Hispanic men","dif_OLS_small",-6.44460842224741,0.206321718878293
+"198","CG White Hispanic men","dif_OLS_int_small",-8.14729832945643,0.218009854570456
+"199","CG White Hispanic men","dif_MLM",-3.995,0.101025641025641
+"200","CG White Hispanic men","dif_MLM_int",-3.995,0.1
+"201","CG White Hispanic men","dif_MLM_real",-3.966,0.477876721341313
+"202","CG White Hispanic men","dif_MLM_int_real",-3.972,0.483089860002557
+"203","CG White Hispanic men","dif_MLM_small",-4.15,0.202051282051281
+"204","CG White Hispanic men","dif_MLM_int_small",-4.179,0.208461538461539
+"205","CG White Hispanic women","dif_OLS",-12.6280797877014,0.0474772861192415
+"206","CG White Hispanic women","dif_OLS_int",-8.05990060899097,0.064689932308012
+"207","CG White Hispanic women","dif_OLS_real",-12.5301532512144,0.0276923076923069
+"208","CG White Hispanic women","dif_OLS_int_real",-7.60840764112417,0.0282051282051281
+"209","CG White Hispanic women","dif_OLS_small",-11.8170412220444,0.207843004873178
+"210","CG White Hispanic women","dif_OLS_int_small",-8.95950558361345,0.303133646642091
+"211","CG White Hispanic women","dif_MLM",-2.002,0.123846153846153
+"212","CG White Hispanic women","dif_MLM_int",-2.002,0.125641025641024
+"213","CG White Hispanic women","dif_MLM_real",-1.927,0.47456820327643
+"214","CG White Hispanic women","dif_MLM_int_real",-1.923,0.608697077593976
+"215","CG White Hispanic women","dif_MLM_small",-2.224,0.239230769230769
+"216","CG White Hispanic women","dif_MLM_int_small",-2.212,0.247692307692308
+"217","FG White Hispanic men","dif_OLS",3.72151570067221,0.0124100109478799
+"218","FG White Hispanic men","dif_OLS_int",3.99520299422328,0.00825166429597056
+"219","FG White Hispanic men","dif_OLS_real",3.73770526591795,0.00820512820512912
+"220","FG White Hispanic men","dif_OLS_int_real",3.93850763803726,8.04435897435897
+"221","FG White Hispanic men","dif_OLS_small",3.58098721404588,0.0544450608765068
+"222","FG White Hispanic men","dif_OLS_int_small",3.99139800876024,0.0366122887309374
+"223","FG White Hispanic men","dif_MLM",3.995,0.0374358974358976
+"224","FG White Hispanic men","dif_MLM_int",3.872,7.70102564102564
+"225","FG White Hispanic men","dif_MLM_real",3.937,0.135043602042274
+"226","FG White Hispanic men","dif_MLM_int_real",2.248,0.0836218949114585
+"227","FG White Hispanic men","dif_MLM_small",3.988,0.0838461538461534
+"228","FG White Hispanic men","dif_MLM_int_small",3.067,14.2579487179487
+"229","FG White Hispanic women","dif_OLS",-3.99453007078295,0.0142073259457416
+"230","FG White Hispanic women","dif_OLS_int",-3.00816108633447,0.0110250110767176
+"231","FG White Hispanic women","dif_OLS_real",-4.01378467952338,0.0110256410256408
+"232","FG White Hispanic women","dif_OLS_int_real",-2.92467688656935,0.0107692307692312
+"233","FG White Hispanic women","dif_OLS_small",-3.79144558575111,0.062244688003904
+"234","FG White Hispanic women","dif_OLS_int_small",-3.05746643527274,0.0498267602317281
+"235","FG White Hispanic women","dif_MLM",-3.008,0.0494871794871808
+"236","FG White Hispanic women","dif_MLM_int",-3.008,0.0517948717948732
+"237","FG White Hispanic women","dif_MLM_real",-2.926,0.150748041293024
+"238","FG White Hispanic women","dif_MLM_int_real",-2.925,0.105157495280047
+"239","FG White Hispanic women","dif_MLM_small",-3.058,0.104102564102564
+"240","FG White Hispanic women","dif_MLM_int_small",-3.056,0.106666666666668

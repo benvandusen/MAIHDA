@@ -1,0 +1,159 @@
+---
+title: "Data sim example"
+output: html_document
+date: '2022-07-03'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rstan)
+library(brms)
+```
+
+#For MLM models, follow parameters set by Evans & Erickson (SSM 2019)and Evans (SSM 2019)
+#burn-in: 5000 iterations; total iterations:50,000 iterations; thinning: 50 iterations 
+#sample size=100000
+
+```{r}
+n = 100000
+seed=12345
+```
+
+############################## Scenario 1 ###################################
+
+
+```{r}
+set.seed (seed)
+
+    Dat<-data.frame(  x1 = sample(c(0,1),n, replace = TRUE),
+                      x2 = sample(c(0,1),n, replace = TRUE),
+                      x3 = sample(c(0,1),n, replace = TRUE),
+                      x4 = sample(c(0,1),n, replace = TRUE),
+                      x5 = sample(c(0,1),n, replace = TRUE))
+    Dat$cluster <- factor(10000*(Dat$x1+1) + 1000*(Dat$x2+1) + 100*(Dat$x3+1) +  10*(Dat$x4+1) + 1*(Dat$x5+1))
+
+    Dat$int <- Dat$x1*Dat$x2
+    Dat$y = Dat$x1 + Dat$x2 + Dat$x3 + Dat$x4 + Dat$x5 + Dat$int + rnorm(n)
+```
+
+
+```{r}
+    ###############OLS REGRESSION without interaction term
+    OLScoeff <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5, data = Dat))$coefficients[,1]
+    OLScoeffSE <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5, data = Dat))$coefficients[,2]
+    OLScoeff2 <- cbind(OLScoeff, OLScoeffSE)
+    OLScoeff2
+    save(OLScoeff2, file="OLScoeff2.rda")
+    
+    ###############OLS REGRESSION with interaction term
+    OLSintcoeff <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5 + x1*x2, data = Dat))$coefficients[,1]
+    OLSintcoeffSE <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5 + x1*x2, data = Dat))$coefficients[,2]
+    OLSintcoeff2 <- cbind(OLSintcoeff, OLSintcoeffSE)
+    OLSintcoeff2
+        save(OLSintcoeff2, file="OLSintcoeff2.rda")
+    
+    ###############MAIHDA, without interaction term
+    MLM2<- brm(formula= y ~ x1 + x2 +x3 + x4 + x5 + (1|cluster), data=Dat, seed=seed, cores=4, iter=50000, warmup = 5000, thin = 50)
+    #extract main and randoms effects coefficients
+fix_MLM2<-    fixef(MLM2)
+ran_MLM2<-    ranef(MLM2)$cluster
+save(fix_MLM2, file="fix_MLM2.rda")
+save(ran_MLM2, file="ran_MLM2.rda")
+    
+    ###############MAIHDA, with interaction term
+    MLMint2<- brm(formula= y ~ x1 + x2 +x3 + x4 + x5 + x1:x2 + (1|cluster), data=Dat, seed=seed, cores=4, iter=50000, warmup = 5000, thin = 50)
+    #extract main effects coefficients
+    fix_MLMint2<-    fixef(MLMint2)
+ran_MLMint2<-    ranef(MLMint2)$cluster
+save(fix_MLMint2, file="fix_MLMint2.rda")
+save(ran_MLMint2, file="ran_MLMint2.rda")
+    
+```
+
+
+#########################Scenario 2 ########################################
+
+```{r}
+ set.seed (seed)
+
+    Dat3070<-data.frame(x1 = sample(c(0,1),n, replace = TRUE, prob=c(0.3, 0.7)),
+                        x2 = sample(c(0,1),n, replace = TRUE, prob=c(0.3, 0.7)),
+                        x3 = sample(c(0,1),n, replace = TRUE),
+                        x4 = sample(c(0,1),n, replace = TRUE),
+                        x5 = sample(c(0,1),n, replace = TRUE))
+    Dat3070$cluster <- factor(10000*(Dat3070$x1+1) + 1000*(Dat3070$x2+1) + 100*(Dat3070$x3+1) +  10*(Dat3070$x4+1) + 1*(Dat3070$x5+1))
+    Dat3070$int <- Dat3070$x1*Dat3070$x2
+    Dat3070$y = Dat3070$x1 + Dat3070$x2 + Dat3070$x3 + Dat3070$x4 + Dat3070$x5 + Dat3070$int + rnorm(n)
+```
+
+
+```{r}
+    ###############OLS REGRESSION without interaction term
+    OLScoeff <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5, data = Dat3070))$coefficients[,1]
+    OLScoeffSE <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5, data = Dat3070))$coefficients[,2]
+    OLScoeff2 <- cbind(OLScoeff, OLScoeffSE)
+    OLScoeff2
+    
+    ###############OLS REGRESSION with interaction term
+    OLSintcoeff <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5 + x1*x2, data = Dat3070))$coefficients[,1]
+    OLSintcoeffSE <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5 + x1*x2, data = Dat3070))$coefficients[,2]
+    OLSintcoeff2 <- cbind(OLSintcoeff, OLSintcoeffSE)
+    OLSintcoeff2
+    
+    ###############MAIHDA, without interaction term
+    MLM1<- brm(formula= y ~ x1 + x2 +x3 + x4 + x5 + (1|cluster), data=Dat3070, seed=seed, cores=4, iter=50000, warmup = 5000, thin = 50)
+    #extract main and random effects coefficients
+    fixef(MLM1)
+    ranef(MLM1)$cluster
+    
+    ###############MAIHDA, with interaction term
+    MLMint1<- brm(formula= y ~ x1 + x2 +x3 + x4 + x5 + x1:x2 + (1|cluster), data=Dat3070, seed=seed, cores=4, iter=50000, warmup = 5000, thin = 50)
+    #extract main effects coefficients
+    fixef(MLMint1)
+    ranef(MLMint1)$cluster
+```
+
+
+############################## Scenario 3 ###################################
+
+```{r}
+ set.seed (seed)
+    Dat<-data.frame( x1 = sample(c(0,1),n, replace = TRUE, prob=c(0.8, 0.2)),
+                     x2 = sample(c(0,1),n, replace = TRUE, prob=c(0.8, 0.2)),
+                     x3 = sample(c(0,1),n, replace = TRUE),
+                     x4 = sample(c(0,1),n, replace = TRUE),
+                     x5 = sample(c(0,1),n, replace = TRUE))
+    Dat$cluster <- factor(10000*(Dat$x1+1) + 1000*(Dat$x2+1) + 100*(Dat$x3+1) +  10*(Dat$x4+1) + 1*(Dat$x5+1))
+    
+    Dat$int <- Dat$x1*Dat$x2
+    Dat$y = Dat$x1 + Dat$x2 + Dat$x3 + Dat$x4 + Dat$x5 - (2*Dat$int) + rnorm(n)
+```
+
+
+```{r}
+    ###############OLS REGRESSION without interaction term
+    OLScoeff <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5, data = Dat))$coefficients[,1]
+    OLScoeffSE <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5, data = Dat))$coefficients[,2]
+    OLScoeff2 <- cbind(OLScoeff, OLScoeffSE)
+    OLScoeff2
+    
+    ###############OLS REGRESSION with interaction term
+    OLSintcoeff <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5 + x1*x2, data = Dat))$coefficients[,1]
+    OLSintcoeffSE <- summary(lm(y ~ x1 + x2 + x3 + x4 + x5 + x1*x2, data = Dat))$coefficients[,2]
+    OLSintcoeff2 <- cbind(OLSintcoeff, OLSintcoeffSE)
+    OLSintcoeff2
+    
+    ###############MAIHDA, without interaction term
+    MLM3<- brm(formula= y ~ x1 + x2 +x3 + x4 + x5 + (1|cluster), data=Dat, seed=seed, cores=4, iter=50000, warmup = 5000, thin = 50)
+    #extract main and randoms effects coefficients
+    fixef(MLM3)
+    ranef(MLM3)$cluster
+    
+    ###############MAIHDA, with interaction term
+    MLMint3<- brm(formula= y ~ x1 + x2 +x3 + x4 + x5 + x1:x2 + (1|cluster), data=Dat, seed=seed, cores=4, iter=50000, warmup = 5000, thin = 50)
+    #extract main and random effects coefficients
+    fixef(MLMint3)
+    ranef(MLMint3)$cluster
+```
+
+

@@ -1,0 +1,100 @@
+---
+title: "Figure"
+output: html_document
+date: '2022-07-21'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(multcomp)
+library(ggplot2)
+cbbpalette <- c( "#009E73", "#e79f00", "#9ad0f3", "#0072B2", "#D55E00", 
+    "#CC79A7","#000000", "#F0E442") #colorblind and grayscale friendly.
+```
+
+
+Load the final model
+```{r}
+load("~/MAIHDA/Evaluation/Eval_df.rda")
+load("~/MAIHDA/Evaluation/sum_eval_df.rda")
+```
+
+
+Difference from true score disag
+```{r}
+#x= sets what variable you want on the x axis. 
+#group= sets what groups you want within each term on the x axis. 
+#color= what groups should define the different colors you use. 
+#shape = sets what term defines the symbols that are used for the points.
+ggplot(data=Eval_df, aes(x=group, y=dif, color=model)) +
+ # , color= Degree, shape = Gender
+  #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
+  geom_point(position = position_dodge(width=0.90), size=3) + 
+  # gemo_errorbar sets the error bars
+  # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
+  #Theme() is setting the key and some other stuff
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+  ylab("Mean Difference from True Score")  +
+  #set the y-axis scale
+  scale_y_continuous(breaks=seq(-15, 15, 5)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/Score_disag.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
+Difference from true score
+```{r}
+#x= sets what variable you want on the x axis. 
+#group= sets what groups you want within each term on the x axis. 
+#color= what groups should define the different colors you use. 
+#shape = sets what term defines the symbols that are used for the points.
+ggplot(data=sum_eval_df, aes(x=model, y=mean_dif, color=model)) +
+ # , color= Degree, shape = Gender
+  #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
+  geom_point(position = "jitter", size=3) + 
+  # gemo_errorbar sets the error bars
+  # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
+  #Theme() is setting the key and some other stuff
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+labs(y="Mean Diff. from True Score",
+     x= "Sample Size") +
+  facet_grid(. ~ N_fac) +
+  #   xlab("Sample Size")  +
+  # ylab("Mean Difference from True Score")  +
+
+  #set the y-axis scale
+  scale_y_continuous(limits=c(0,10.5)) 
+    #breaks=seq(-2, 2, .5),limits=c(-2,2)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/Score.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
+SE
+```{r}
+#x= sets what variable you want on the x axis. 
+#group= sets what groups you want within each term on the x axis. 
+#color= what groups should define the different colors you use. 
+#shape = sets what term defines the symbols that are used for the points.
+ggplot(data=sum_out, aes(x=size, y=mean_SE, color=type)) +
+ # , color= Degree, shape = Gender
+  #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
+  geom_point(position = position_dodge(width=0.90), size=3) + 
+  # gemo_errorbar sets the error bars
+  # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
+  #Theme() is setting the key and some other stuff
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+  ylab("Mean standard error")  +
+  xlab("Sample size") +
+  #set the y-axis scale
+  scale_y_continuous(limits=c(0,6)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/SE.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+

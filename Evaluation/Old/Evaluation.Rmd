@@ -1,0 +1,138 @@
+---
+title: "Evaluation"
+output: html_document
+date: '2022-07-20'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stringr)
+```
+
+Load the data
+```{r}
+load("~/MAIHDA/Estimates/pred_score_MAIHDA_10000.rda")
+load("~/MAIHDA/Estimates/pred_score_MAIHDA_5000.rda")
+load("~/MAIHDA/Estimates/pred_score_MAIHDA_1000.rda")
+load("~/MAIHDA/Estimates/pred_score_MAIHDA_500.rda")
+
+load("~/MAIHDA/Estimates/Est_MLM_10000.rda")
+load("~/MAIHDA/Estimates/Est_MLM_5000.rda")
+load("~/MAIHDA/Estimates/Est_MLM_1000.rda")
+load("~/MAIHDA/Estimates/Est_MLM_500.rda")
+
+```
+
+Expected values
+```{r}
+Group <- c("CG Asian men", 'CG Asian women', 'CG Black men', 'CG Black women', 'CG Hispanic men', 'CG Hispanic women', 'CG White Hispanic men', 'CG White Hispanic women', 'CG White men', 'CG White women', 
+           'FG Asian men', 'FG Asian women', 
+            'FG Black men', 'FG Black women', 
+            'FG Hispanic men', 'FG Hispanic women', 'FG White Hispanic men', 'FG White Hispanic women',
+            'FG White men', 'FG White women')
+Exp_val <- as.data.frame(Group) %>%
+  mutate(Asian = ifelse(str_detect(Group, "Asian")==TRUE,1,0),
+         Black = ifelse(str_detect(Group, "Black")==TRUE,1,0),
+         Hispanic = ifelse(str_detect(Group, "Hispanic")==TRUE,1,0),
+         White = ifelse(str_detect(Group, "White")==TRUE,1,0),
+         White_Hispanic = ifelse(str_detect(Group, "White")==TRUE,ifelse(str_detect(Group, "Hispanic")==TRUE,1,0),0),
+         women = ifelse(str_detect(Group, "women"),1,0),
+         men = ifelse(women==1,0,1),
+         FG = ifelse(str_detect(Group, "FG"),1,0),
+         CG = ifelse(str_detect(Group, "CG"),1,0),
+         True_score = 47 - 3*FG -10*women -6*Black -10*Hispanic +2*White +3*FG*women +1*White*Hispanic -1*FG*Black +2*FG*Hispanic +2*FG*White -2*women*Black + 1*women*Hispanic -4*women*White - 1*FG*White*Hispanic + 5*women*White*Hispanic + 4*FG*women*Black + 1*FG*women*White - 1* FG*women*White*Hispanic)
+```
+
+Add in the values we actually got and compare
+```{r}
+MAIHDA_10000 <- pred_score_MAIHDA_10000 %>%
+  rename(score_MAIHDA_10000 = value) %>%
+  mutate(SE_MAIHDA_10000 = (.upper - .lower)/(1.95*2)) %>%
+  select(score_MAIHDA_10000,SE_MAIHDA_10000)
+
+MAIHDA_5000 <- pred_score_MAIHDA_5000 %>%
+  rename(score_MAIHDA_5000 = value) %>%
+  mutate(SE_MAIHDA_5000 = (.upper - .lower)/(1.95*2)) %>%
+  select(score_MAIHDA_5000,SE_MAIHDA_5000)
+
+MAIHDA_1000 <- pred_score_MAIHDA_1000 %>%
+  rename(score_MAIHDA_1000 = value) %>%
+  mutate(SE_MAIHDA_1000 = (.upper - .lower)/(1.95*2)) %>%
+  select(score_MAIHDA_1000,SE_MAIHDA_1000)
+
+MAIHDA_500 <- pred_score_MAIHDA_500 %>%
+  rename(score_MAIHDA_500 = value) %>%
+  mutate(SE_MAIHDA_500 = (.upper - .lower)/(1.95*2)) %>%
+  select(score_MAIHDA_500,SE_MAIHDA_500)
+
+MLM_10000 <- Est_MLM_10000 %>%
+  rename(score_MLM_10000 = Q,
+         SE_MLM_10000 = SE) %>%
+  select (score_MLM_10000, SE_MLM_10000)
+
+MLM_5000 <- Est_MLM_5000 %>%
+  rename(score_MLM_5000 = Q,
+         SE_MLM_5000 = SE) %>%
+  select (score_MLM_5000, SE_MLM_5000)
+
+MLM_1000 <- Est_MLM_1000 %>%
+  rename(score_MLM_1000 = Q,
+         SE_MLM_1000 = SE) %>%
+  select (score_MLM_1000, SE_MLM_1000)
+
+MLM_500 <- Est_MLM_500 %>%
+  rename(score_MLM_500 = Q,
+         SE_MLM_500 = SE) %>%
+  select (score_MLM_500, SE_MLM_500)
+
+
+outcomes <- cbind(Exp_val, MLM_10000, MLM_5000, MLM_1000, MLM_500, MAIHDA_10000, MAIHDA_5000, MAIHDA_1000, MAIHDA_500) %>%
+  mutate(dif_MLM_10000 = score_MLM_10000 - True_score,
+         dif_MLM_5000 = score_MLM_5000 - True_score,
+         dif_MLM_1000 = score_MLM_1000 - True_score,
+         dif_MLM_500 = score_MLM_500 - True_score,
+         dif_MAIHDA_10000 = score_MAIHDA_10000 - True_score,
+         dif_MAIHDA_5000 = score_MAIHDA_5000 - True_score,
+         dif_MAIHDA_1000 = score_MAIHDA_1000 - True_score,
+         dif_MAIHDA_500 = score_MAIHDA_500 - True_score) %>%
+  mutate_if(is.double, round, digits = 3)
+
+test <- outcomes %>%
+  select(Group, True_score)
+
+ag_out_dif <- outcomes %>% 
+  pivot_longer(cols=starts_with("dif"),
+               names_to="mod",
+               values_to = "dif") %>%
+  select(Group,mod,dif)
+
+ag_out_SE <- outcomes %>% 
+  pivot_longer(cols=starts_with("SE"),
+               names_to="mod",
+               values_to = "SE") %>%
+  select(SE)
+ 
+all_out <- cbind(ag_out_dif, ag_out_SE)
+
+sum_out <- all_out %>% group_by(mod) %>%
+  summarize(mean_dif=mean(abs(dif)),
+            mean_SE=mean(SE)) %>%
+  mutate(mod = c("MAIHDA 1,000","MAIHDA 10,000", "MAIHDA 500", "MAIHDA 5,000", 
+                 "MLM 1,000","MLM 10,000", "MLM 500", "MLM 5,000"),
+         mod = factor(mod, levels=c("MAIHDA 10,000","MAIHDA 5,000","MAIHDA 1,000","MAIHDA 500", "MLM 10,000", "MLM 5,000", "MLM 1,000", "MLM 500")),
+         type = c("MAIHDA","MAIHDA",
+           "MAIHDA","MAIHDA", 
+           "Traditional", "Traditional", 
+           "Traditional","Traditional"),
+         size = c("1,000","10,000","500","5,000", 
+           "1,000","10,000","500","5,000"),
+         size = factor(size, levels= c("500", "1,000", "5,000", "10,000")),
+                  size_c = c(1000,10000,500,5000,1000,10000,500,5000))
+
+save(all_out, file="all_out.rda")
+save(sum_out, file="sum_out.rda")
+write.csv(all_out, file="all_out.csv")
+write.csv(sum_out, file="sum_out.csv")
+```
+

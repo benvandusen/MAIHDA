@@ -1,0 +1,203 @@
+---
+title: "estimates"
+output: html_document
+date: '2022-07-19'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidybayes)
+library(tidyverse)
+library(MuMIn)
+library(brms)
+library(lme4)
+library(foreach)
+library(multcomp)
+```
+
+Load data
+```{r}
+load("~/MAIHDA/Model_output/MAIHDA_10000.rda")
+load("~/MAIHDA/Model_output/MAIHDA_5000.rda")
+load("~/MAIHDA/Model_output/MAIHDA_1000.rda")
+load("~/MAIHDA/Model_output/MAIHDA_500.rda")
+
+load("~/MAIHDA/Model_output/MLM_10000.rda")
+load("~/MAIHDA/Model_output/MLM_5000.rda")
+load("~/MAIHDA/Model_output/MLM_1000.rda")
+load("~/MAIHDA/Model_output/MLM_500.rda")
+```
+
+
+Create function for getting frequentist estimates
+```{r}
+get_est <- function(mod,groups,name){
+ #this summarizes a bunch of key features of your model making predictions for each group
+temp <- summary(glht(mod, linfct=groups)) 
+
+# this looks at the covariance across variables and helps create accurate error bars when adding terms together
+temp_cov <- vcov(glht(mod, linfct=groups)) 
+
+#this gives you the actual estimates for each group
+get.est <-  data.frame(group=rownames(temp$linfct), 
+             d = temp$test$coefficients, 
+             var.d = (temp$test$sigma)^2,
+             cov = temp_cov)
+
+#This combines the estimates with the correct error terms
+est <- get.est %>% group_by(group) %>% 
+                  summarise(Q = mean(d), 
+                            T = mean(var.d), 
+                            LCL = Q - 1.96*sqrt(T), 
+                            UCL = Q + 1.96*sqrt(T),
+                            SE = sqrt(T)) %>%
+  mutate(CG = word(group, 1), #This makes a new variable called "Race" and it uses the first word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
+         Race = word(group, 2), #This makes a new variable called "Gender" and it uses the second word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
+         Gender = word(group, 3), #This makes a new variable called "Degree" and it uses the third word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
+  model=name)
+return <- est}
+```
+
+Frequentist estimates w/ interactions
+```{r message=FALSE}
+#first for no interaction terms
+#         c(I,w,B,H,W,FG,HW, wB,wH,wW,wFG, BFG,HFG,WFG, wHW, HWF, wBFG,wHFG,wWFH,wHWFG)
+
+CAM   = c(1,0,0,0,0,0 ,0 , 0 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+CAW   = c(1,1,0,0,0,0 ,0 , 0 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+FAM   = c(1,0,0,0,0,1 ,0 , 0 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+FAW   = c(1,1,0,0,0,1 ,0 , 0 ,0 ,0 ,1  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+CBM   = c(1,0,1,0,0,0 ,0 , 0 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+CBW   = c(1,1,1,0,0,0 ,0 , 1 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+FBM   = c(1,0,1,0,0,1 ,0 , 0 ,0 ,0 ,0  ,1   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+FBW   = c(1,1,1,0,0,1 ,0 , 1 ,0 ,0 ,1  ,1   , 0 ,0  ,0   ,0   , 1   ,0   ,0   ,0    )
+CHM   = c(1,0,0,1,0,0 ,0 , 0 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+CHW   = c(1,1,0,1,0,0 ,0 , 0 ,1 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+FHM   = c(1,0,0,1,0,1 ,0 , 0 ,0 ,0 ,0  ,0   , 1 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+FHW   = c(1,1,0,1,0,1 ,0 , 0 ,1 ,0 ,1  ,0   , 1 ,0  ,0   ,0   , 0   ,1   ,0   ,0    )
+CWM   = c(1,0,0,0,1,0 ,0 , 0 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+CWW   = c(1,1,0,0,1,0 ,0 , 0 ,0 ,1 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+FWM   = c(1,0,0,0,1,1 ,0 , 0 ,0 ,0 ,0  ,0   , 0 ,1  ,0   ,0   , 0   ,0   ,0   ,0    )
+FWW   = c(1,1,0,0,1,1 ,0 , 0 ,0 ,1 ,1  ,0   , 0 ,1  ,0   ,0   , 0   ,0   ,1   ,0    )
+CWHM  = c(1,0,0,1,1,0 ,1 , 0 ,0 ,0 ,0  ,0   , 0 ,0  ,0   ,0   , 0   ,0   ,0   ,0    )
+CWHW  = c(1,1,0,1,1,0 ,1 , 0 ,1 ,1 ,0  ,0   , 0 ,0  ,1   ,0   , 0   ,0   ,0   ,0    )
+FWHM  = c(1,0,0,1,1,1 ,1 , 0 ,0 ,0 ,0  ,0   , 1 ,1  ,0   ,1   , 0   ,0   ,0   ,0    )
+FWHW  = c(1,1,0,1,1,1 ,1 , 0 ,1 ,1 ,1  ,0   , 1 ,1  ,1   ,1   , 0   ,1   ,1   ,1    )
+
+
+demo_matrix <- rbind('CG Asian men'=CAM,  
+                          'CG Asian women'=CAW,
+                          'FG Asian men'=FAM,  
+                          'FG Asian women'=FAW,
+                     'CG Black men'=CBM, 
+                          'CG Black women'=CBW,
+                          'FG Black men'=FBM, 
+                          'FG Black women'=FBW,
+                     'CG Hispanic men'=CHM, 
+                          'CG Hispanic women'=CHW,
+                          'FG Hispanic men'=FHM, 
+                          'FG Hispanic women'=FHW,
+                     'CG White men'=CWM,  
+                          'CG White women'=CWW,
+                          'FG White men'=FWM,  
+                          'FG White women'=FWW,
+                     'CG White Hispanic men'=CWHM,  
+                          'CG White Hispanic women'=CWHW,
+                          'FG White Hispanic men'=FWHM,  
+                          'FG White Hispanic women'=FWHW)
+
+load("~/MAIHDA/Model_output/MLM_10000.rda")
+load("~/MAIHDA/Model_output/MLM_5000.rda")
+load("~/MAIHDA/Model_output/MLM_1000.rda")
+load("~/MAIHDA/Model_output/MLM_500.rda")
+
+Est_MLM_10000 <- get_est(MLM_10000,demo_matrix,"MLM_10000")
+Est_MLM_5000 <- get_est(MLM_5000,demo_matrix,"MLM_5000")
+Est_MLM_1000 <- get_est(MLM_1000,demo_matrix,"MLM_1000")
+Est_MLM_500 <- get_est(MLM_500,demo_matrix,"MLM_500")
+
+save(Est_MLM_10000, file="~/MAIHDA/Estimates/Est_MLM_10000.rda")
+save(Est_MLM_5000, file="~/MAIHDA/Estimates/Est_MLM_5000.rda")
+save(Est_MLM_1000, file="~/MAIHDA/Estimates/Est_MLM_1000.rda")
+save(Est_MLM_500, file="~/MAIHDA/Estimates/Est_MLM_500.rda")
+```
+
+Functions for non-intersectional Bayesian estimates
+```{r}
+pred_scores <- function(posterior,name) {
+
+posterior <- posterior %>%
+  rename_with(~gsub(":", "_",.x, fixed = TRUE)) %>%
+  rename_with(~gsub("b_", "",.x, fixed = TRUE)) %>%
+  rename_with(~gsub("r_cluster[1", "c",.x, fixed = TRUE)) %>%
+  rename_with(~gsub(",Intercept]", "",.x, fixed = TRUE))
+
+#pretest
+Estimates <- posterior %>% 
+  mutate(#Asian
+    CG_Asian_men = Intercept + c100000, 
+         CG_Asian_women = Intercept + women + c100010,
+          FG_Asian_men = Intercept + FG + c100001,
+          FG_Asian_women = Intercept + women + FG + c100011,
+
+    #Black
+    CG_Black_men = Intercept + Black + c010000,
+         CG_Black_women = Intercept + Black + women + c010010,
+         FG_Black_men = Intercept + Black + FG + c010001,
+         FG_Black_women = Intercept + Black + women + FG + c010011,
+    #Hispanic
+    CG_Hispanic_men = Intercept + Hispanic + c001000,
+         CG_Hispanic_women = Intercept + Hispanic + women + c001010,
+         FG_Hispanic_men = Intercept + Hispanic + FG + c001001,
+         FG_Hispanic_women = Intercept + Hispanic + women + FG + c001011,
+    #White
+    CG_White_men = Intercept + White + c000100,
+         CG_White_women = Intercept + White + women + c000110,
+         FG_White_men = Intercept + White + FG + c000101,
+         FG_White_women = Intercept + White + women + FG + c000111,
+        #White Hispanic
+             CG_White_Hispanic_men = Intercept + White + Hispanic + c001100,
+         CG_White_Hispanic_women = Intercept + White + Hispanic + women + c001110,
+         FG_White_Hispanic_men = Intercept + White + Hispanic + FG + c001101,
+         FG_White_Hispanic_women = Intercept + White + Hispanic + women + FG + c001111) %>% 
+  
+  pivot_longer(CG_Asian_men:FG_White_Hispanic_women,
+               names_to = "soc_id") %>%
+  group_by(soc_id) %>%
+  mean_qi(value) %>% 
+  mutate_if(is.double, round, digits = 3) %>%
+  mutate(model = name)
+
+return(Estimates)
+}
+```
+
+Create posteriors
+```{r}
+posterior_MAIHDA_10000 <- posterior_samples(MAIHDA_10000, c("b_", "bsp_","r_cluster"))
+posterior_MAIHDA_5000 <- posterior_samples(MAIHDA_5000, c("b_", "bsp_","r_cluster"))
+posterior_MAIHDA_1000 <- posterior_samples(MAIHDA_1000, c("b_", "bsp_","r_cluster"))
+posterior_MAIHDA_500 <- posterior_samples(MAIHDA_500, c("b_", "bsp_","r_cluster"))
+
+
+save(posterior_MAIHDA_10000, file="posterior_MAIHDA_10000.rda")
+save(posterior_MAIHDA_5000, file="posterior_MAIHDA_5000.rda")
+save(posterior_MAIHDA_1000, file="posterior_MAIHDA_1000.rda")
+save(posterior_MAIHDA_500, file="posterior_MAIHDA_500.rda")
+```
+
+
+Get predicted values
+```{r}
+pred_score_MAIHDA_10000 <- pred_scores(posterior_MAIHDA_10000, "MAIHDA_10000")
+pred_score_MAIHDA_5000 <- pred_scores(posterior_MAIHDA_5000, "MAIHDA_5000")
+pred_score_MAIHDA_1000 <- pred_scores(posterior_MAIHDA_1000, "MAIHDA_1000")
+pred_score_MAIHDA_500 <- pred_scores(posterior_MAIHDA_10000, "MAIHDA_500")
+
+
+save(pred_score_MAIHDA_10000, file="pred_score_MAIHDA_10000.rda")
+save(pred_score_MAIHDA_5000, file="pred_score_MAIHDA_5000.rda")
+save(pred_score_MAIHDA_1000, file="pred_score_MAIHDA_1000.rda")
+save(pred_score_MAIHDA_500, file="pred_score_MAIHDA_500.rda")
+```
+
