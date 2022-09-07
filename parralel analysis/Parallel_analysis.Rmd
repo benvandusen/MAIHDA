@@ -528,10 +528,8 @@ save(out_1000_20, file="out_1000_20.rda")
 
 ```{r include=FALSE}
 #5000 here
-Sys.time()
 out_5000_1 <- foreach(i=1:50) %dopar% {sim_HLM_fun(5000,i)}
 save(out_5000_1, file="out_5000_1.rda")
-Sys.time()
 
 out_5000_2 <- foreach(i=51:100) %dopar% {sim_HLM_fun(5000,i)}
 save(out_5000_2, file="out_5000_2.rda")
