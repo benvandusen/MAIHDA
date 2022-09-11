@@ -38,15 +38,18 @@ Exp_val <- as.data.frame(Group) %>%
 Add in the values we actually got and compare
 ```{r}
 Eval_df <- df %>%
-  mutate(True_score = rep(Exp_val$True_score,9000),
-         dif = Score - True_score,) %>%
+  mutate(True_score = rep(Exp_val$True_score,8967),
+         dif = Score - True_score,
+         group = as.factor(group),
+         model = as.factor(model),
+         column_label = as.factor(column_label)) %>%
   mutate_if(is.double, round, digits = 3)
 
 sum_eval_df <- Eval_df %>% group_by(model,column_label) %>%
-   summarize(mean_dif=mean(abs(dif)),
+   summarise(mean_dif=mean(abs(dif)),
              mean_SE=mean(SE),
-             N=N,
-             N_fac=as.factor(N))
+             N=mean(N)) %>%
+  mutate(N_fac=as.factor(N))
   
 # 
 # test <- outcomes %>%

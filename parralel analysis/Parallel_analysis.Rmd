@@ -395,6 +395,7 @@ return(final)}
 ```
 
 Forloop simulating data 500
+Missing iterations failed to run, likely due to a model failing to converge. Small sample sizes for some sub groups.
 ```{r include=FALSE}
 #500 here
 out_500_1 <- foreach(i=1:11) %dopar% {sim_HLM_fun(500,i)}
@@ -460,26 +461,116 @@ save(out_500_20, file="out_500_20.rda")
 out_500_21 <- foreach(i=333:360) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_21, file="out_500_21.rda")
 
-out_500_22 <- foreach(i=1:50) %dopar% {sim_HLM_fun(500,i)}
-save(out_500_23, file="out_500_22.rda")
+out_500_22 <- foreach(i=361:378) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_22, file="out_500_22.rda")
 
-out_500_24 <- foreach(i=1:50) %dopar% {sim_HLM_fun(500,i)}
+out_500_23 <- foreach(i=380:410) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_23, file="out_500_23.rda")
+
+out_500_24 <- foreach(i=411:417) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_24, file="out_500_24.rda")
 
-out_500_25 <- foreach(i=1:50) %dopar% {sim_HLM_fun(500,i)}
+out_500_25 <- foreach(i=419:425) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_25, file="out_500_25.rda")
 
-out_500_26 <- foreach(i=1:50) %dopar% {sim_HLM_fun(500,i)}
+out_500_26 <- foreach(i=427:450) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_26, file="out_500_26.rda")
 
-out_500_27 <- foreach(i=1:50) %dopar% {sim_HLM_fun(500,i)}
+out_500_27 <- foreach(i=451:433) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_27, file="out_500_27.rda")
 
-out_500_28 <- foreach(i=1:50) %dopar% {sim_HLM_fun(500,i)}
+out_500_28 <- foreach(i=435:470) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_28, file="out_500_28.rda")
 
-out_500_29 <- foreach(i=1:50) %dopar% {sim_HLM_fun(500,i)}
+out_500_29 <- foreach(i=471:482) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_29, file="out_500_29.rda")
+
+out_500_30 <- foreach(i=484:520) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_30, file="out_500_30.rda")
+
+out_500_31 <- foreach(i=521:550) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_31, file="out_500_31.rda")
+
+out_500_32 <- foreach(i=551:567) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_32, file="out_500_32.rda")
+
+out_500_33 <- foreach(i=569:574) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_33, file="out_500_33.rda")
+
+out_500_34 <- foreach(i=576:588) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_34, file="out_500_34.rda")
+
+out_500_35 <- foreach(i=590:613) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_35, file="out_500_35.rda")
+
+out_500_36 <- foreach(i=615:633) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_36, file="out_500_36.rda")
+
+out_500_37 <- foreach(i=635:668) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_37, file="out_500_37.rda")
+
+out_500_38 <- foreach(i=670:671) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_38, file="out_500_38.rda")
+
+out_500_39 <- foreach(i=673:674) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_39, file="out_500_39.rda")
+
+out_500_40 <- foreach(i=676:697) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_40, file="out_500_40.rda")
+
+out_500_41 <- foreach(i=699) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_41, file="out_500_41.rda")
+
+out_500_42 <- foreach(i=701) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_42, file="out_500_42.rda")
+
+out_500_43 <- foreach(i=703:750) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_43, file="out_500_43.rda")
+
+out_500_44 <- foreach(i=751:786) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_44, file="out_500_44.rda")
+
+out_500_45 <- foreach(i=788:798) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_45, file="out_500_45.rda")
+
+out_500_46 <- foreach(i=800:806) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_46, file="out_500_46.rda")
+
+out_500_47 <- foreach(i=808:826) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_47, file="out_500_47.rda")
+
+out_500_48 <- foreach(i=828:850) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_48, file="out_500_48.rda")
+
+out_500_49 <- foreach(i=852:854) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_49, file="out_500_49.rda")
+
+out_500_50 <- foreach(i=856:877) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_50, file="out_500_50.rda")
+
+out_500_51 <- foreach(i=878:886) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_51, file="out_500_51.rda")
+
+out_500_52 <- foreach(i=888:900) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_52, file="out_500_52.rda")
+
+out_500_53 <- foreach(i=901:920) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_53, file="out_500_53.rda")
+
+out_500_54 <- foreach(i=921:936) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_54, file="out_500_54.rda")
+
+out_500_55 <- foreach(i=938:955) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_55, file="out_500_55.rda")
+
+out_500_56 <- foreach(i=956:975) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_56, file="out_500_56.rda")
+
+out_500_57 <- foreach(i=976:990) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_57, file="out_500_57.rda")
+
+out_500_58 <- foreach(i=992:1000) %dopar% {sim_HLM_fun(500,i)}
+save(out_500_58, file="out_500_58.rda")
 ```
 
 Forloop simulating data 1000
@@ -503,7 +594,7 @@ save(out_1000_4, file="out_1000_4.rda")
 out_1000_5 <- foreach(i=201:250) %dopar% {sim_HLM_fun(1000,i)}
 save(out_1000_5, file="out_1000_5.rda")
 
-out_1000_6 <- foreach(i=151:300) %dopar% {sim_HLM_fun(1000,i)}
+out_1000_6 <- foreach(i=251:300) %dopar% {sim_HLM_fun(1000,i)}
 save(out_1000_6, file="out_1000_6.rda")
 
 out_1000_7 <- foreach(i=301:350) %dopar% {sim_HLM_fun(1000,i)}
@@ -569,7 +660,7 @@ save(out_5000_4, file="out_5000_4.rda")
 out_5000_5 <- foreach(i=201:250) %dopar% {sim_HLM_fun(5000,i)}
 save(out_5000_5, file="out_5000_5.rda")
 
-out_5000_6 <- foreach(i=151:300) %dopar% {sim_HLM_fun(5000,i)}
+out_5000_6 <- foreach(i=251:300) %dopar% {sim_HLM_fun(5000,i)}
 save(out_5000_6, file="out_5000_6.rda")
 
 out_5000_7 <- foreach(i=301:350) %dopar% {sim_HLM_fun(5000,i)}
@@ -619,8 +710,17 @@ Combine files
 
 ```{r}
 temp <- c(out_500_1, out_500_2, out_500_3, out_500_4, out_500_5, out_500_6, out_500_7, out_500_8, out_500_9, out_500_10, out_500_11, out_500_12, out_500_13, out_500_14, out_500_15, out_500_16, out_500_17, out_500_18, out_500_19, out_500_20,
+          out_500_21, out_500_22, out_500_23, out_500_24, out_500_25, out_500_26, out_500_27, out_500_28, out_500_29, out_500_30,
+          out_500_31, out_500_32, out_500_33, out_500_34, out_500_35, out_500_36, out_500_37, out_500_38, out_500_39, out_500_40,
+          out_500_41, out_500_42, out_500_43, out_500_44, out_500_45, out_500_46, out_500_47, out_500_48, out_500_49, out_500_50,
+          out_500_51, out_500_52, out_500_53, out_500_54, out_500_55, out_500_56, out_500_57, out_500_58,
           out_1000_1, out_1000_2, out_1000_3, out_1000_4, out_1000_5, out_1000_6, out_1000_7, out_1000_8, out_1000_9, out_1000_10, out_1000_11, out_1000_12, out_1000_13, out_1000_14, out_1000_15, out_1000_16, out_1000_17, out_1000_18, out_1000_19, out_1000_20,
           out_5000_1, out_5000_2, out_5000_3, out_5000_4, out_5000_5, out_5000_6, out_5000_7, out_5000_8, out_5000_9, out_5000_10, out_5000_11, out_5000_12, out_5000_13, out_5000_14, out_5000_15, out_5000_16, out_5000_17, out_5000_18, out_5000_19, out_5000_20)
 df <- bind_rows(temp, .id = "column_label")
 save(df, file="df.rda")
+
+test_5000 <- filter(df,N==5000)
+test_1000 <- filter(df,N==1000)
+test_500 <- filter(df,N==500)
+
 ```

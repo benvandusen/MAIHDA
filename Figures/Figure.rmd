@@ -54,7 +54,8 @@ Difference from true score
 ggplot(data=sum_eval_df, aes(x=model, y=mean_dif, color=model)) +
  # , color= Degree, shape = Gender
   #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
-  geom_point(position = "jitter", size=3) + 
+  geom_violin(trim=TRUE) +
+  geom_point(position = "jitter", size=1, alpha=0.2) + 
   # gemo_errorbar sets the error bars
   # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
   #Theme() is setting the key and some other stuff
@@ -67,7 +68,7 @@ labs(y="Mean Diff. from True Score",
   # ylab("Mean Difference from True Score")  +
 
   #set the y-axis scale
-  scale_y_continuous(limits=c(0,10.5)) 
+  scale_y_continuous(limits=c(0,14)) 
     #breaks=seq(-2, 2, .5),limits=c(-2,2)) 
 
 #Saves the image
@@ -80,10 +81,10 @@ SE
 #group= sets what groups you want within each term on the x axis. 
 #color= what groups should define the different colors you use. 
 #shape = sets what term defines the symbols that are used for the points.
-ggplot(data=sum_out, aes(x=size, y=mean_SE, color=type)) +
+ggplot(data=sum_eval_df, aes(x=model, y=mean_SE, color=model)) +
  # , color= Degree, shape = Gender
   #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
-  geom_point(position = position_dodge(width=0.90), size=3) + 
+  geom_point(position = "jitter", size=1, alpha=0.2) + 
   # gemo_errorbar sets the error bars
   # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
   #Theme() is setting the key and some other stuff
@@ -91,8 +92,9 @@ ggplot(data=sum_out, aes(x=size, y=mean_SE, color=type)) +
   # set the y-axis label
   ylab("Mean standard error")  +
   xlab("Sample size") +
+    facet_grid(. ~ N_fac) +
   #set the y-axis scale
-  scale_y_continuous(limits=c(0,6)) 
+  scale_y_continuous(limits=c(0,9.5)) 
 
 #Saves the image
 ggsave("~/MAIHDA/Figures/SE.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
