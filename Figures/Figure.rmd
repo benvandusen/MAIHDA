@@ -17,7 +17,7 @@ cbbpalette <- c( "#009E73", "#e79f00", "#9ad0f3", "#0072B2", "#D55E00",
 
 Load the final model
 ```{r}
-load("~/MAIHDA/Evaluation/Eval_df.rda")
+load("~/MAIHDA/Evaluation/eval_df.rda")
 load("~/MAIHDA/Evaluation/sum_eval_df.rda")
 ```
 
@@ -45,6 +45,22 @@ ggplot(data=Eval_df, aes(x=group, y=dif, color=model)) +
 ggsave("~/MAIHDA/Figures/Score_disag.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 ```
 
+Jayson code
+raw_plot_fun <- function(assessment){
+raw_plot <- ggplot(data = plot_df %>% filter(assessment_code==assessment, gender_cat != "Other", race_cat!="Other"),
+                           aes(y = Score, x = race_cat, fill = Time, color = Time))+
+     scale_fill_viridis_d( option = "C")+ scale_color_viridis_d( option = "C")+
+    geom_point( shape = 21,size=1, position = position_jitterdodge(),color="black",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+     theme_pubr()+
+  xlab("")+
+  ylab("Score (%)")+
+  theme(legend.title = element_blank(), legend.position = 'bottom',legend.box = "horizontal",legend.direction = "horizontal") + facet_grid(gender_cat~.) #+
+  #ggtitle(assessment)
+return(raw_plot)
+}
+
 Difference from true score
 ```{r}
 #x= sets what variable you want on the x axis. 
@@ -54,8 +70,11 @@ Difference from true score
 ggplot(data=sum_eval_df, aes(x=model, y=mean_dif, color=model)) +
  # , color= Degree, shape = Gender
   #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
-  geom_violin(trim=TRUE) +
-  geom_point(position = "jitter", size=1, alpha=0.2) + 
+  geom_point( shape = 21,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+  # geom_violin(trim=TRUE) +
+  # geom_point(position = "jitter", size=1, alpha=0.2) + 
   # gemo_errorbar sets the error bars
   # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
   #Theme() is setting the key and some other stuff
@@ -75,6 +94,86 @@ labs(y="Mean Diff. from True Score",
 ggsave("~/MAIHDA/Figures/Score.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 ```
 
+Difference from true score (CGWM)
+```{r}
+
+ggplot(data=filter(eval_df, group=="CG White men"), aes(x=model, y=dif_abs, color=model)) +
+
+  geom_point( shape = 21,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+labs(y="Diff. from True Score (WM)",
+     x= "Sample Size") +
+  facet_grid(. ~ N_fac) +
+  scale_y_continuous(limits=c(-1,15)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/Score_CGWM.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
+Difference from true score (FGWM)
+```{r}
+
+ggplot(data=filter(eval_df, group=="FG White men"), aes(x=model, y=dif_abs, color=model)) +
+
+  geom_point( shape = 21,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+labs(y="Diff. from True Score (WM)",
+     x= "Sample Size") +
+  facet_grid(. ~ N_fac) +
+  scale_y_continuous(limits=c(-1,15)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/Score_FGWM.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
+Difference from true score (FGWW)
+```{r}
+
+ggplot(data=filter(eval_df, group=="FG White women"), aes(x=model, y=dif_abs, color=model)) +
+
+  geom_point( shape = 21,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+labs(y="Diff. from True Score (WM)",
+     x= "Sample Size") +
+  facet_grid(. ~ N_fac) +
+  scale_y_continuous(limits=c(-1,17)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/Score_FGWW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
+Difference from true score (FGBW)
+```{r}
+
+ggplot(data=filter(eval_df, group=="FG Black women"), aes(x=model, y=dif_abs, color=model)) +
+
+  geom_point( shape = 21,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+labs(y="Diff. from True Score (WM)",
+     x= "Sample Size") +
+  facet_grid(. ~ N_fac) +
+  scale_y_continuous(limits=c(-1,60)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/Score_FGBW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
 SE
 ```{r}
 #x= sets what variable you want on the x axis. 
@@ -84,7 +183,9 @@ SE
 ggplot(data=sum_eval_df, aes(x=model, y=mean_SE, color=model)) +
  # , color= Degree, shape = Gender
   #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
-  geom_point(position = "jitter", size=1, alpha=0.2) + 
+  geom_point( shape = 21,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
   # gemo_errorbar sets the error bars
   # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
   #Theme() is setting the key and some other stuff

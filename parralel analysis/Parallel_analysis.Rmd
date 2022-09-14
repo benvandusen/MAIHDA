@@ -5,6 +5,7 @@ date: "8088-08-88"
 ---
 
 ```{r setup, include=FALSE}
+library(dplyr)
 library(foreach)
  library(doParallel)
  library(parallel)
@@ -17,7 +18,6 @@ library(MuMIn)
 
 library(rstan)
 library(brms)
-library(dplyr)
 library(lme4)
 ```
 
@@ -79,7 +79,30 @@ course_dif <- rep(course_dif, course_enroll)
 Sim <- Sim %>%
   mutate(course_diff = course_dif,
          score = score + course_diff)
-    
+# temp <- Sim %>% group_by(cluster) %>%
+#   summarise(N=n())
+# Sim <- merge(Sim,temp,by="cluster")
+# Sim <- Sim %>%
+#   mutate(group = ifelse(cluster==1100000, "CG Asian men",
+#                         ifelse(cluster==1100010, "CG Asian women",
+#                                ifelse(cluster==1010000, "CG Black men",
+#                                       ifelse(cluster==1010010, "CG Black women",
+#                                              ifelse(cluster==1001000, "CG Hispanic men",
+#                  ifelse(cluster==1001010, "CG Hispanic women",
+#                         ifelse(cluster==1000100, "CG White men",
+#                                ifelse(cluster==1000110, "CG White women",
+#                                       ifelse(cluster==1001100, "CG White Hispanic men",
+#                                              ifelse(cluster==1001110, "CG White Hispanic women",
+#                  ifelse(cluster==1100001, "FG Asian men",
+#                         ifelse(cluster==1100011, "FG Asian women",
+#                                ifelse(cluster==1010001, "FG Black men",
+#                                       ifelse(cluster==1010011, "FG Black women",
+#                                              ifelse(cluster==1001001, "FG Hispanic men",
+#                 ifelse(cluster==1001011, "FG Hispanic women",
+#                         ifelse(cluster==1000101, "FG White men",
+#                                ifelse(cluster==1000111, "FG White wmen",
+#                                       ifelse(cluster==1001101, "FG White Hispanic men",
+#                                              ifelse(cluster==1001111, "FG White Hispanic women",1)))))))))))))))))))))
 
 return(Sim)}
 ```
@@ -195,6 +218,7 @@ demo_matrix <- rbind('CG Asian men'=CAM,
 
 temp <- get_est(mod,demo_matrix)
 
+
 return(temp)}
 ```
 
@@ -210,63 +234,63 @@ posterior <- posterior %>%
 #pretest
 Estimates <- posterior %>% 
   mutate(#Asian
-    "CG Asian Men" = Intercept, 
-         "CG Asian Women" = Intercept + 
+    "CG Asian men" = Intercept, 
+         "CG Asian women" = Intercept + 
           women,
-          "FG Asian Men" = Intercept + 
+          "FG Asian men" = Intercept + 
             FG,
-          "FG Asian Women" = Intercept +
+          "FG Asian women" = Intercept +
            women +
            FG + women_FG,
     # # #Black
-    "CG Black Men" = Intercept +
+    "CG Black men" = Intercept +
            Black,
-         "CG Black Women" = Intercept +
+         "CG Black women" = Intercept +
            Black + women + women_Black,
-         "FG Black Men" = Intercept +
+         "FG Black men" = Intercept +
            Black +
            FG + Black_FG,
-         "FG Black Women" = Intercept +
+         "FG Black women" = Intercept +
            Black + women + women_Black +
            FG + Black_FG + women_FG + women_Black_FG,
     # #Hispanic
-         "CG Hispanic Men" = Intercept +
+         "CG Hispanic men" = Intercept +
            Hispanic,
-         "CG Hispanic Women" = Intercept +
+         "CG Hispanic women" = Intercept +
            Hispanic + women + women_Hispanic,
-         "FG Hispanic Men" = Intercept +
+         "FG Hispanic men" = Intercept +
            Hispanic +
            FG + Hispanic_FG,
-         "FG Hispanic Women" = Intercept +
+         "FG Hispanic women" = Intercept +
            Hispanic + women + women_Hispanic +
            FG + Hispanic_FG + women_FG + women_Hispanic_FG,
     #     #White
-         "CG White Men" = Intercept +
+         "CG White men" = Intercept +
            White,
-         "CG White Women" = Intercept +
+         "CG White women" = Intercept +
            White + women + women_White,
-         "FG White Men" = Intercept +
+         "FG White men" = Intercept +
            White +
            FG + White_FG,
-         "FG White Women" = Intercept +
+         "FG White women" = Intercept +
            White + women + women_White +
            FG + White_FG + women_FG + women_White_FG,
     #      White Hispanic
-             "CG White Hispanic Men" = Intercept +
+             "CG White Hispanic men" = Intercept +
            White + Hispanic + Hispanic_White,
-         "CG White Hispanic Women" = Intercept +
+         "CG White Hispanic women" = Intercept +
            White + Hispanic + Hispanic_White +
                women + women_White + women_Hispanic + women_Hispanic_White,
-         "FG White Hispanic Men" = Intercept +
+         "FG White Hispanic men" = Intercept +
            White + Hispanic + Hispanic_White +
            FG + White_FG + Hispanic_FG + Hispanic_White_FG,
-         "FG White Hispanic Women" = Intercept +
+         "FG White Hispanic women" = Intercept +
            White + Hispanic + Hispanic_White +
                women + women_White + women_Hispanic + women_Hispanic_White +
                FG + White_FG + Hispanic_FG + Hispanic_White_FG +
                women_FG + women_White_FG + women_Hispanic_FG + women_Hispanic_White_FG
          ) %>% 
-  pivot_longer("CG Asian Men":"FG White Hispanic Women",
+  pivot_longer("CG Asian men":"FG White Hispanic women",
                names_to = "soc_id") %>%
   group_by(soc_id) %>%
   mean_qi(value) %>% 
@@ -476,11 +500,8 @@ save(out_500_25, file="out_500_25.rda")
 out_500_26 <- foreach(i=427:450) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_26, file="out_500_26.rda")
 
-out_500_27 <- foreach(i=451:433) %dopar% {sim_HLM_fun(500,i)}
+out_500_27 <- foreach(i=451:470) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_27, file="out_500_27.rda")
-
-out_500_28 <- foreach(i=435:470) %dopar% {sim_HLM_fun(500,i)}
-save(out_500_28, file="out_500_28.rda")
 
 out_500_29 <- foreach(i=471:482) %dopar% {sim_HLM_fun(500,i)}
 save(out_500_29, file="out_500_29.rda")
@@ -710,7 +731,7 @@ Combine files
 
 ```{r}
 temp <- c(out_500_1, out_500_2, out_500_3, out_500_4, out_500_5, out_500_6, out_500_7, out_500_8, out_500_9, out_500_10, out_500_11, out_500_12, out_500_13, out_500_14, out_500_15, out_500_16, out_500_17, out_500_18, out_500_19, out_500_20,
-          out_500_21, out_500_22, out_500_23, out_500_24, out_500_25, out_500_26, out_500_27, out_500_28, out_500_29, out_500_30,
+          out_500_21, out_500_22, out_500_23, out_500_24, out_500_25, out_500_26, out_500_27, out_500_29, out_500_30,
           out_500_31, out_500_32, out_500_33, out_500_34, out_500_35, out_500_36, out_500_37, out_500_38, out_500_39, out_500_40,
           out_500_41, out_500_42, out_500_43, out_500_44, out_500_45, out_500_46, out_500_47, out_500_48, out_500_49, out_500_50,
           out_500_51, out_500_52, out_500_53, out_500_54, out_500_55, out_500_56, out_500_57, out_500_58,
@@ -723,4 +744,59 @@ test_5000 <- filter(df,N==5000)
 test_1000 <- filter(df,N==1000)
 test_500 <- filter(df,N==500)
 
+```
+
+function for calculating subgroup N
+```{r}
+sim_data_sub_N <- function(n,seed){
+set.seed(seed)
+      Sim<-data.frame(Race = sample(c(0,1,2,3,4),n, replace = TRUE, prob=c(.17,.07,.09,.77,.12)),
+                      women = sample(c(0,1),n, replace = TRUE, prob=c(.64,.36)),
+                      FG = sample(c(0,1),n, replace = TRUE, prob=c(.64,.36)))
+Sim <- Sim  %>%
+  mutate(Asian = ifelse(Race==0,1,0),
+         Black = ifelse(Race==1,1,0),
+         Hispanic = ifelse(Race==2 | Race==4,1,0),
+         White = ifelse(Race==3 | Race==4,1,0),
+         cluster = (1000000 + 100000*(Asian) +10000*(Black) +1000*(Hispanic) +100*(White) + 10*(women) + 1*(FG)))
+
+N_sub <- Sim %>% group_by(cluster) %>%
+  summarise(N_groups=n()) %>%
+  mutate(group=c("CG White men","FG White men","CG White women","FG White women","CG Hispanic men","FG Hispanic men","CG Hispanic women","FG Hispanic women", "CG White Hispanic men","FG White Hispanic men","CG White Hispanic women", "FG White Hispanic women", "CG Black men","FG Black men","CG Black women","FG Black women","CG Asian men","FG Asian men","CG Asian women","FG Asian women"),
+         group=as.factor(c("CG Asian men", "CG Asian women", "CG Black men", "CG Black women", "CG Hispanic men", "CG Hispanic women", "CG White Hispanic men", "CG White Hispanic women", "CG White men", "CG White women", 
+                          "FG Asian men", "FG Asian women", "FG Black men", "FG Black women", "FG Hispanic men", "FG Hispanic women", "FG White Hispanic men", "FG White Hispanic women", "FG White men", "FG White women")))
+    
+
+return(N_sub)}
+```
+
+Get N for subgroup
+```{r}
+include <- c(1:11,13:55, 57:120, 122:150, 151:158,
+             160, 163:171, 173:193, 195:208, 210:220,
+             222:223, 225:240, 242:250, 252:267, 269:279,
+             281:284, 286:294, 296:314, 316:326, 328:331,
+             333:360, 361:378, 380:410, 411:417, 419:425,
+             427:450, 451:470, 471:482, 484:520, 521:550,
+             551:567, 569:574, 576:588, 590:613, 615:633,
+             635:668, 670:671, 673:674, 676:697, 699,
+             701, 703:750, 751:786, 788:798, 800:806,
+             808:826, 828:850, 852:854, 856:877, 878:886,
+             888:900, 901:920, 921:936, 938:955, 956:975,
+             976:990, 992:1000)
+
+N_500 <- foreach(i = include) %dopar% {sim_data_sub_N(500,i)}
+save(N_500, file="N_500.rda")
+
+N_1000 <- foreach(i=1:1000) %dopar% {sim_data_sub_N(1000,i)}
+save(N_1000, file="N_1000.rda")
+
+N_5000 <- foreach(i=1:1000) %dopar% {sim_data_sub_N(5000,i)}
+save(N_5000, file="N_5000.rda")
+
+temp <- rep(c(N_500, N_1000, N_5000),3)
+temp_2 <- bind_rows(temp, .id = "column_label")
+temp_2 <- select(temp_2,c("N_groups"))
+df <- cbind(df,temp_2[,"N_groups"])
+save(df, file="df.rda")
 ```

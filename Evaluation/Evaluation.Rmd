@@ -37,56 +37,29 @@ Exp_val <- as.data.frame(Group) %>%
 
 Add in the values we actually got and compare
 ```{r}
-Eval_df <- df %>%
-  mutate(True_score = rep(Exp_val$True_score,8967),
+eval_df <- df %>%
+  mutate(True_score = rep(Exp_val$True_score,8868),
          dif = Score - True_score,
-         group = as.factor(group),
+         dif_abs = abs(dif),
          model = as.factor(model),
-         column_label = as.factor(column_label)) %>%
+         column_label = as.factor(column_label),
+         N_fac=as.factor(N),
+         group = gsub("Men","men",group),
+         group = gsub("Women","women",group),
+         group = as.factor(group)) %>%
   mutate_if(is.double, round, digits = 3)
+  
 
 sum_eval_df <- Eval_df %>% group_by(model,column_label) %>%
    summarise(mean_dif=mean(abs(dif)),
              mean_SE=mean(SE),
              N=mean(N)) %>%
   mutate(N_fac=as.factor(N))
-  
-# 
-# test <- outcomes %>%
-#   select(Group, True_score)
-# 
-# ag_out_dif <- outcomes %>% 
-#   pivot_longer(cols=starts_with("dif"),
-#                names_to="mod",
-#                values_to = "dif") %>%
-#   select(Group,mod,dif)
-# 
-# ag_out_SE <- outcomes %>% 
-#   pivot_longer(cols=starts_with("SE"),
-#                names_to="mod",
-#                values_to = "SE") %>%
-#   select(SE)
-#  
-# all_out <- cbind(ag_out_dif, ag_out_SE)
-# 
-# sum_out <- all_out %>% group_by(mod) %>%
-#   summarize(mean_dif=mean(abs(dif)),
-#             mean_SE=mean(SE)) %>%
-#   mutate(mod = c("MAIHDA 1,000","MAIHDA 10,000", "MAIHDA 500", "MAIHDA 5,000", 
-#                  "MLM 1,000","MLM 10,000", "MLM 500", "MLM 5,000"),
-#          mod = factor(mod, levels=c("MAIHDA 10,000","MAIHDA 5,000","MAIHDA 1,000","MAIHDA 500", "MLM 10,000", "MLM 5,000", "MLM 1,000", "MLM 500")),
-#          type = c("MAIHDA","MAIHDA",
-#            "MAIHDA","MAIHDA", 
-#            "Traditional", "Traditional", 
-#            "Traditional","Traditional"),
-#          size = c("1,000","10,000","500","5,000", 
-#            "1,000","10,000","500","5,000"),
-#          size = factor(size, levels= c("500", "1,000", "5,000", "10,000")),
-#                   size_c = c(1000,10000,500,5000,1000,10000,500,5000))
 
-save(Eval_df, file="Eval_df.rda")
-write.csv(Eval_df, file="Eval_df")
+
+save(eval_df, file="eval_df.rda")
+write.csv(eval_df, file="eval_df.csv")
 save(sum_eval_df, file="sum_eval_df.rda")
-write.csv(sum_eval_df, file="sum_eval_df")
+write.csv(sum_eval_df, file="sum_eval_df.csv")
 ```
 
