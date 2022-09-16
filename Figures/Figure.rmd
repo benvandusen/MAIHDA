@@ -28,38 +28,48 @@ Difference from true score disag
 #group= sets what groups you want within each term on the x axis. 
 #color= what groups should define the different colors you use. 
 #shape = sets what term defines the symbols that are used for the points.
-ggplot(data=Eval_df, aes(x=group, y=dif, color=model)) +
+ggplot(data=eval_df, aes(x=N_groups, y=dif, color=group)) +
  # , color= Degree, shape = Gender
   #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
-  geom_point(position = position_dodge(width=0.90), size=3) + 
+  geom_point(shape = 21,size=.05,  alpha=1) + 
   # gemo_errorbar sets the error bars
   # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
   #Theme() is setting the key and some other stuff
   theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
   # set the y-axis label
-  ylab("Mean Difference from True Score")  +
+  ylab("Difference from True Score")  +
+    facet_grid(model ~ .) 
   #set the y-axis scale
-  scale_y_continuous(breaks=seq(-15, 15, 5)) 
+  # scale_y_continuous(breaks=seq(-15, 15, 5)) 
 
 #Saves the image
 ggsave("~/MAIHDA/Figures/Score_disag.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 ```
 
-Jayson code
-raw_plot_fun <- function(assessment){
-raw_plot <- ggplot(data = plot_df %>% filter(assessment_code==assessment, gender_cat != "Other", race_cat!="Other"),
-                           aes(y = Score, x = race_cat, fill = Time, color = Time))+
-     scale_fill_viridis_d( option = "C")+ scale_color_viridis_d( option = "C")+
-    geom_point( shape = 21,size=1, position = position_jitterdodge(),color="black",  alpha=.1)+
-     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
-    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
-     theme_pubr()+
-  xlab("")+
-  ylab("Score (%)")+
-  theme(legend.title = element_blank(), legend.position = 'bottom',legend.box = "horizontal",legend.direction = "horizontal") + facet_grid(gender_cat~.) #+
-  #ggtitle(assessment)
-return(raw_plot)
-}
+SE disag
+```{r}
+#x= sets what variable you want on the x axis. 
+#group= sets what groups you want within each term on the x axis. 
+#color= what groups should define the different colors you use. 
+#shape = sets what term defines the symbols that are used for the points.
+ggplot(data=eval_df, aes(x=N_groups, y=SE, color=group)) +
+ # , color= Degree, shape = Gender
+  #geom_point sets it as points on the plot (as apposed to geom_bar which would give a bar graph)
+  geom_point(shape = 21,size=.05,  alpha=1) + 
+  # gemo_errorbar sets the error bars
+  # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
+  #Theme() is setting the key and some other stuff
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+  ylab("Standard error")  +
+    facet_grid(model ~ .) 
+  #set the y-axis scale
+  # scale_y_continuous(breaks=seq(-15, 15, 5)) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/SE_disag.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
 
 Difference from true score
 ```{r}
