@@ -50,7 +50,7 @@ eval_df <- df %>%
   mutate_if(is.double, round, digits = 3)
   
 
-sum_eval_df <- Eval_df %>% group_by(model,column_label) %>%
+sum_eval_df <- eval_df %>% group_by(model,column_label) %>%
    summarise(mean_dif=mean(abs(dif)),
              mean_SE=mean(SE),
              N=mean(N)) %>%
@@ -61,5 +61,24 @@ save(eval_df, file="eval_df.rda")
 write.csv(eval_df, file="eval_df.csv")
 save(sum_eval_df, file="sum_eval_df.rda")
 write.csv(sum_eval_df, file="sum_eval_df.csv")
+```
+
+Summary table
+```{r}
+sum_table <- eval_df %>% group_by(N_fac, group, model) %>%
+  summarise(N= mean(N_groups),
+         True_score = mean(True_score),
+         Diff_from_true = mean(dif_abs),
+         SE = mean(SE))
+
+test <- sum_table %>%
+  pivot_wider(names_from= model, values_from = c(Diff_from_true, SE))
+
+sum_table_wide <- test[with(test,order(group,N_fac)),]
+
+save(sum_table, file="sum_table.rda")
+write.csv(sum_table, file="sum_table.csv")
+save(sum_table_wide, file="sum_table_wide.rda")
+write.csv(sum_table_wide, file="sum_table_wide.csv")
 ```
 

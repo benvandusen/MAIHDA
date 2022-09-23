@@ -762,8 +762,8 @@ Sim <- Sim  %>%
 
 N_sub <- Sim %>% group_by(cluster) %>%
   summarise(N_groups=n()) %>%
-  mutate(group=c("CG White men","FG White men","CG White women","FG White women","CG Hispanic men","FG Hispanic men","CG Hispanic women","FG Hispanic women", "CG White Hispanic men","FG White Hispanic men","CG White Hispanic women", "FG White Hispanic women", "CG Black men","FG Black men","CG Black women","FG Black women","CG Asian men","FG Asian men","CG Asian women","FG Asian women"),
-         group=as.factor(c("CG Asian men", "CG Asian women", "CG Black men", "CG Black women", "CG Hispanic men", "CG Hispanic women", "CG White Hispanic men", "CG White Hispanic women", "CG White men", "CG White women", 
+  mutate(group=c("CG White men","FG White men","CG White women","FG White women","CG Hispanic men","FG Hispanic men","CG Hispanic women","FG Hispanic women", "CG White Hispanic men","FG White Hispanic men","CG White Hispanic women", "FG White Hispanic women", "CG Black men","FG Black men","CG Black women","FG Black women","CG Asian men","FG Asian men","CG Asian women","FG Asian women")) %>%
+  arrange(match(group,c("CG Asian men", "CG Asian women", "CG Black men", "CG Black women", "CG Hispanic men", "CG Hispanic women", "CG White Hispanic men", "CG White Hispanic women", "CG White men", "CG White women", 
                           "FG Asian men", "FG Asian women", "FG Black men", "FG Black women", "FG Hispanic men", "FG Hispanic women", "FG White Hispanic men", "FG White Hispanic women", "FG White men", "FG White women")))
     
 
@@ -794,9 +794,8 @@ save(N_1000, file="N_1000.rda")
 N_5000 <- foreach(i=1:1000) %dopar% {sim_data_sub_N(5000,i)}
 save(N_5000, file="N_5000.rda")
 
-temp <- rep(c(N_500, N_1000, N_5000),3)
+temp <- rep(c(N_500, N_1000, N_5000), each = 3)
 temp_2 <- bind_rows(temp, .id = "column_label")
-temp_2 <- select(temp_2,c("N_groups"))
 df <- cbind(df,temp_2[,"N_groups"])
 save(df, file="df.rda")
 ```
