@@ -46,7 +46,9 @@ eval_df <- df %>%
          N_fac=as.factor(N),
          group = gsub("Men","men",group),
          group = gsub("Women","women",group),
-         group = as.factor(group)) %>%
+         group = as.factor(group),
+         model = ifelse(model=="HLM_freq","Freq.",
+                        ifelse(model=="HLM_bay","Bay.","MAIHDA"))) %>%
   mutate_if(is.double, round, digits = 3)
   
 
@@ -54,13 +56,23 @@ sum_eval_df <- eval_df %>% group_by(model,column_label) %>%
    summarise(mean_dif=mean(abs(dif)),
              mean_SE=mean(SE),
              N=mean(N)) %>%
-  mutate(N_fac=as.factor(N))
+  mutate(N_fac=as.factor(N),
+         model = ifelse(model=="HLM_freq","Freq.",
+                        ifelse(model=="HLM_bay","Bay.","MAIHDA")))
+
+bias_df <- eval_df %>% group_by(N_groups,model,N_fac) %>%
+  summarise(bias=mean(dif),
+            SD = sd(dif),
+            N= n(),
+            SE = SD/sqrt(N))
 
 
 save(eval_df, file="eval_df.rda")
 write.csv(eval_df, file="eval_df.csv")
 save(sum_eval_df, file="sum_eval_df.rda")
 write.csv(sum_eval_df, file="sum_eval_df.csv")
+save(bias_df, file="bias_df.rda")
+write.csv(bias_df, file="bias_df.csv")
 ```
 
 Summary table

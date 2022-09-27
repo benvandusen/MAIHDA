@@ -1,4 +1,4 @@
-"","N_fac","group","N","True_score","Diff_from_true_HLM_bay","Diff_from_true_HLM_freq","Diff_from_true_MAIHDA","SE_HLM_bay","SE_HLM_freq","SE_MAIHDA"
+"","N_fac","group","N","True_score","Diff_from_true_Bay.","Diff_from_true_Freq.","Diff_from_true_MAIHDA","SE_Bay.","SE_Freq.","SE_MAIHDA"
 "1","500","CG Asian men",28.3462343096234,47,3.99761820083682,3.99948744769874,3.38450209205021,5.16292782426778,4.93813807531381,4.58903242677824
 "2","1000","CG Asian men",56.779,47,2.842564,2.842682,2.493505,3.526937,3.48785,3.163923
 "3","5000","CG Asian men",285.918,47,1.228006,1.225914,1.168523,1.530874,1.555245,1.455582
