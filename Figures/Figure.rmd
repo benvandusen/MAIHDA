@@ -65,6 +65,8 @@ ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif, col
 
   ylab("True Error")  +
   # scale_y_continuous(limits = c(-30,30)) +
+# scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
     geom_hline(yintercept=0, alpha = 0.3) +
       facet_grid(model ~ N_fac) 
 
@@ -83,6 +85,7 @@ ggplot(data=filter(eval_df,  N_groups>20 & N_groups<50), aes(x=as.factor(N_group
 
   ylab("True Error")  +
   # scale_y_continuous(limits = c(-30,30)) +
+scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
     geom_hline(yintercept=0, alpha = 0.3) +
       facet_grid(model ~ N_fac) 
 
