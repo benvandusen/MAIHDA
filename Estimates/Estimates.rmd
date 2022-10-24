@@ -186,6 +186,11 @@ save(posterior_MAIHDA_1000, file="posterior_MAIHDA_1000.rda")
 save(posterior_MAIHDA_500, file="posterior_MAIHDA_500.rda")
 ```
 
+residuals
+```{r}
+
+```
+
 
 Get predicted values
 ```{r}

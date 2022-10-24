@@ -136,6 +136,14 @@ temp <- brm(formula= score ~ 1 + women + Black + Hispanic + White + FG + (1|cour
 return(temp)}
 ```
 
+Get priors
+```{r}
+example <- sim_data(1000)
+
+get_prior(formula= score ~ 1 + women + Black + Hispanic + White + FG + (1|course) + (1|cluster), data=example)
+```
+
+
 Function for calculating outcomes in HLM_freq models part 1
 
 ```{r}
@@ -419,7 +427,7 @@ return(final)}
 ```
 
 Forloop simulating data 500
-Missing iterations failed to run, likely due to a model failing to converge. Small sample sizes for some sub groups.
+Missing iterations failed to run do to some groups having n=0
 ```{r include=FALSE}
 #500 here
 out_500_1 <- foreach(i=1:11) %dopar% {sim_HLM_fun(500,i)}
