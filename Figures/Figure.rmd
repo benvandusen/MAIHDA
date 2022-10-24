@@ -49,11 +49,31 @@ ggplot(data=eval_df, aes(x=N_groups, y=dif, color=N_fac)) +
 ggsave("~/MAIHDA/Figures/Score_disag.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 ```
 
+Difference from true score disag (B&W)
+```{r}
+ggplot(data=eval_df, aes(x=N_groups, y=dif, color=N_fac)) +
+
+  geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.2) + 
+ guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colour") +
+  labs(color="Total sample \nsize", x="Sub-group sample size") +
+
+  ylab("True Error")  +
+  scale_x_continuous(trans='log10') +
+    geom_hline(yintercept=0, alpha = 0.3) +
+    facet_grid(model ~ .) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/Score_disag_BW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
 Box plot for true error by sub-group sample size
 ```{r}
 
 
-ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif, color=N_fac)) +
+ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif)) +
 
   geom_boxplot(outlier.shape=NA) +
   # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
@@ -65,7 +85,6 @@ ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif, col
 
   ylab("True Error")  +
   # scale_y_continuous(limits = c(-30,30)) +
-# scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
   scale_x_discrete(guide = guide_axis(n.dodge=2))+
     geom_hline(yintercept=0, alpha = 0.3) +
       facet_grid(model ~ N_fac) 
@@ -73,7 +92,7 @@ ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif, col
 #Saves the image
 ggsave("~/MAIHDA/Figures/True_error_box_20.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 
-ggplot(data=filter(eval_df,  N_groups>20 & N_groups<50), aes(x=as.factor(N_groups), y=dif, color=N_fac)) +
+ggplot(data=filter(eval_df,  N_groups>20 & N_groups<50), aes(x=as.factor(N_groups), y=dif)) +
 
   geom_boxplot(outlier.shape=NA) +
   # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
@@ -85,92 +104,144 @@ ggplot(data=filter(eval_df,  N_groups>20 & N_groups<50), aes(x=as.factor(N_group
 
   ylab("True Error")  +
   # scale_y_continuous(limits = c(-30,30)) +
-scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
     geom_hline(yintercept=0, alpha = 0.3) +
       facet_grid(model ~ N_fac) 
 
 #Saves the image
 ggsave("~/MAIHDA/Figures/True_error_box_50.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 
+ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif)) +
+
+  geom_boxplot(outlier.shape=NA) +
+  # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
+ guides(colour = guide_legend(override.aes = list(size=1, alpha=1))) +
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colour") +
+  labs(color="Total sample \nsize", x="Sub-group sample size") +
+
+  ylab("True Error")  +
+  # scale_y_continuous(limits = c(-30,30)) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+    geom_hline(yintercept=0, alpha = 0.3) +
+      facet_grid(model ~ N_fac) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/True_error_box_20_BW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+
+ggplot(data=filter(eval_df,  N_groups>20 & N_groups<50), aes(x=as.factor(N_groups), y=dif)) +
+
+  geom_boxplot(outlier.shape=NA) +
+  # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
+ guides(colour = guide_legend(override.aes = list(size=1, alpha=1))) +
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colour") +
+  labs(color="Total sample \nsize", x="Sub-group sample size") +
+
+  ylab("True Error")  +
+  # scale_y_continuous(limits = c(-30,30)) +
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+    geom_hline(yintercept=0, alpha = 0.3) +
+      facet_grid(model ~ N_fac) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/True_error_box_50_BW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+
 
 ```
 
 SE disag
 ```{r}
-#x= sets what variable you want on the x axis. 
-#group= sets what groups you want within each term on the x axis. 
-#color= what groups should define the different colors you use. 
-#shape = sets what term defines the symbols that are used for the points.
 ggplot(data=eval_df, aes(x=N_groups, y=SE, color=N_fac)) +
   geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.2) + 
    guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
   theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
-  
   scale_color_manual(values=cbbpalette) +
-  # set the y-axis label
   ylab("Estimated Standard Error")  +
     labs(color="Total sample \nsize", x="Sub-group sample size") +
    scale_x_continuous(trans='log10') +
     geom_hline(yintercept=0, alpha = 0.3) +
     facet_grid(model ~ .) 
-  #set the y-axis scale
-  # scale_y_continuous(breaks=seq(-15, 15, 5)) 
 
 #Saves the image
 ggsave("~/MAIHDA/Figures/SE_disag.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+
+ggplot(data=eval_df, aes(x=N_groups, y=SE, color=N_fac)) +
+  geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.2) + 
+   guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colour") +
+  ylab("Estimated Standard Error")  +
+    labs(color="Total sample \nsize", x="Sub-group sample size") +
+   scale_x_continuous(trans='log10') +
+    geom_hline(yintercept=0, alpha = 0.3) +
+    facet_grid(model ~ .) 
+
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/SE_disag_BW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 ```
 
 violin plot function
 ```{r}
-violin_group_fun <- function(Data, Group, Title, Upper){
+violin_group_fun <- function(Data, Group, Title, Upper, Lower){
 
-    ggplot(data=filter(Data, group==Group), aes(x=model, y=dif_abs, color=N_fac)) +
+    ggplot(data=filter(Data, group==Group), aes(x=model, y=dif)) +
     scale_color_manual(values=cbbpalette) +
   geom_point( shape = 19,size=1, position = "jitter",  alpha=.1)+
      geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
     geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
    guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
-  # geom_violin(trim=TRUE) +
-  # geom_point(position = "jitter", size=1, alpha=0.2) + 
-  # gemo_errorbar sets the error bars
-  # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
-  #Theme() is setting the key and some other stuff
   theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
-  # set the y-axis label
 labs(y="Mean True Error",color="Total sample \nsize", title = Title) +
   
   facet_grid(. ~ N_fac) +
-  #   xlab("Sample Size")  +
-  # ylab("Mean Difference from True Score")  +
+  scale_y_continuous(limits=c(Lower,Upper)) 
+}
 
-  #set the y-axis scale
-  scale_y_continuous(limits=c(-1,Upper)) 
+violin_group_fun_BW <- function(Data, Group, Title, Upper, Lower){
+
+    ggplot(data=filter(Data, group==Group), aes(x=model, y=dif)) +
+scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colour") +
+  geom_point( shape = 19,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+   guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+labs(y="Mean True Error",color="Total sample \nsize", title = Title) +
+  
+  facet_grid(. ~ N_fac) +
+  scale_y_continuous(limits=c(Lower,Upper)) 
   }
 ```
 
 Difference from true score
 ```{r}
-violin_group_fun(eval_df,"CG White men","CG White men",60)
+violin_group_fun(eval_df,"CG White men","CG White men",60,-60)
 ggsave("~/MAIHDA/Figures/Score_CGWM.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 
-violin_group_fun(eval_df,"FG Black women","FG Black women",60)
+violin_group_fun(eval_df,"FG Black women","FG Black women",60,-60)
 ggsave("~/MAIHDA/Figures/Score_FGBW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+
+violin_group_fun_BW(eval_df,"CG White men","CG White men",60,-60)
+ggsave("~/MAIHDA/Figures/Score_CGWM_BW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+
+violin_group_fun_BW(eval_df,"FG Black women","FG Black women",60,-60)
+ggsave("~/MAIHDA/Figures/Score_FGBW_BW.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 
 ```
 
 Combined plot
 ```{r}
-    ggplot(data=filter(eval_df, N_fac==500), aes(x=model, y=dif_abs, color=model)) +
+    ggplot(data=filter(eval_df, N_fac==500), aes(x=model, y=dif, color=model)) +
 scale_color_manual(values=cbbpalette) +
   geom_point( shape = 19,size=1, position = "jitter",  alpha=.1)+
      geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
     geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
    guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
-  # geom_violin(trim=TRUE) +
-  # geom_point(position = "jitter", size=1, alpha=0.2) + 
-  # gemo_errorbar sets the error bars
-  # geom_errorbar(aes( ymax= Q+SE, ymin=Q-SE), position="dodge")+
-  #Theme() is setting the key and some other stuff
+
   theme(legend.position = "right",  axis.text.x=element_blank(), axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
   # set the y-axis label
 labs(y="Mean True Error",color="Total sample \nsize", title = "Compound plot (N_sample=500)") +
@@ -180,9 +251,29 @@ labs(y="Mean True Error",color="Total sample \nsize", title = "Compound plot (N_
   # ylab("Mean Difference from True Score")  +
 
   #set the y-axis scale
-  scale_y_continuous(limits=c(-1,60)) 
+  scale_y_continuous(limits=c(-60,60)) 
 
 ggsave("~/MAIHDA/Figures/Score_compound.png", plot= last_plot(), dpi=300, width = 11, height = 6, units = "in", device = "png")
+
+    ggplot(data=filter(eval_df, N_fac==500), aes(x=model, y=dif, color=model)) +
+scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colour") +
+  geom_point( shape = 19,size=1, position = "jitter",  alpha=.1)+
+     geom_violin(alpha=0.1, position = position_dodge(width = .75),size=.5,color="black") +
+    geom_boxplot(notch = TRUE,  outlier.size = -1, color="black",lwd=0.6, alpha = 0.1)+
+   guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
+
+  theme(legend.position = "right",  axis.text.x=element_blank(), axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  # set the y-axis label
+labs(y="Mean True Error",color="Total sample \nsize", title = "Compound plot (N_sample=500)") +
+  
+  facet_wrap(~ group, ncol=4) +
+  #   xlab("Sample Size")  +
+  # ylab("Mean Difference from True Score")  +
+
+  #set the y-axis scale
+  scale_y_continuous(limits=c(-60,60)) 
+
+ggsave("~/MAIHDA/Figures/Score_compound_BW.png", plot= last_plot(), dpi=300, width = 11, height = 6, units = "in", device = "png")
 ```
 
 Difference from true score (mean)
@@ -271,7 +362,7 @@ Bias + points (using eval_df)
 ggplot(data=eval_df, aes(x=N_groups, y=dif, color=N_fac)) +
 
   geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.2) + 
-  geom_line(stat="smooth", alpha=0.8, color="black") +
+  geom_smooth(alpha=0.5) +
  guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
 
   theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
