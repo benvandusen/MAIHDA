@@ -196,6 +196,7 @@ violin_group_fun <- function(Data, Group, Title, Upper, Lower){
    guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
   theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
 labs(y="Mean True Error",color="Total sample \nsize", title = Title) +
+        geom_hline(yintercept=0, alpha = 0.3) +
   
   facet_grid(. ~ N_fac) +
   scale_y_continuous(limits=c(Lower,Upper)) 
@@ -211,6 +212,7 @@ scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colo
    guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
   theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.title.x = element_blank(), axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
 labs(y="Mean True Error",color="Total sample \nsize", title = Title) +
+        geom_hline(yintercept=0, alpha = 0.3) +
   
   facet_grid(. ~ N_fac) +
   scale_y_continuous(limits=c(Lower,Upper)) 
@@ -247,6 +249,7 @@ scale_color_manual(values=cbbpalette) +
 labs(y="Mean True Error",color="Total sample \nsize", title = "Compound plot (N_sample=500)") +
   
   facet_wrap(~ group, ncol=4) +
+      geom_hline(yintercept=0, alpha = 0.3) +
   #   xlab("Sample Size")  +
   # ylab("Mean Difference from True Score")  +
 
@@ -267,6 +270,7 @@ scale_color_grey(start = 0.2,  end = 0.8,  na.value = "red",  aesthetics = "colo
 labs(y="Mean True Error",color="Total sample \nsize", title = "Compound plot (N_sample=500)") +
   
   facet_wrap(~ group, ncol=4) +
+          geom_hline(yintercept=0, alpha = 0.3) +
   #   xlab("Sample Size")  +
   # ylab("Mean Difference from True Score")  +
 
