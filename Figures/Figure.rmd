@@ -73,7 +73,7 @@ Box plot for true error by sub-group sample size
 ```{r}
 
 
-ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif)) +
+ggplot(data=filter(eval_df,  N_groups<21 ), aes(x=as.factor(N_groups), y=dif)) +
 
   geom_boxplot(outlier.shape=NA) +
   # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
@@ -91,6 +91,27 @@ ggplot(data=filter(eval_df,  N_groups<20), aes(x=as.factor(N_groups), y=dif)) +
 
 #Saves the image
 ggsave("~/MAIHDA/Figures/True_error_box_20.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+
+ggplot(data=filter(eval_df,  N_groups<21& N_groups>5), aes(x=as.factor(N_groups), y=dif)) +
+
+  geom_boxplot(outlier.shape=NA) +
+  # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
+ guides(colour = guide_legend(override.aes = list(size=1, alpha=1))) +
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  scale_color_manual(values=cbbpalette) +
+  labs(color="Total sample \nsize", x="Sub-group sample size") +
+
+  ylab("True Error")  +
+  # scale_y_continuous(limits = c(-30,30)) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+    geom_hline(yintercept=0, alpha = 0.3) +
+      geom_hline(yintercept=14, alpha = 0.3, linetype = "dashed") +
+      geom_hline(yintercept=-14, alpha = 0.3, linetype = "dashed") +
+      facet_grid(model ~ N_fac) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/True_error_box_20_lines.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
 
 ggplot(data=filter(eval_df,  N_groups>20 & N_groups<50), aes(x=as.factor(N_groups), y=dif)) +
 
@@ -151,6 +172,34 @@ ggsave("~/MAIHDA/Figures/True_error_box_50_BW.png", plot= last_plot(), dpi=300, 
 
 
 ```
+
+Mean abs true error by sub-group sample size
+```{r}
+load("~/MAIHDA/Evaluation/SD_table.rda")
+
+SD_table <- SD_table %>%
+  mutate(N_fac = factor(ifelse(N_fac==500,"Total Sample = 500","Total Sample = 1000"), levels=c("Total Sample = 500","Total Sample = 1000")))
+
+ggplot(data=filter(SD_table), aes(x=as.factor(N_groups), y=mean_abs)) +
+
+  geom_point() +
+  # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
+ guides(colour = guide_legend(override.aes = list(size=1, alpha=1))) +
+
+  theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
+  scale_color_manual(values=cbbpalette) +
+  labs(color="Total sample \nsize", x="Sub-group sample size") +
+
+  ylab("Mean Absolute True Error")  +
+  scale_y_continuous(limits = c(0,16)) +
+  scale_x_discrete(guide = guide_axis(n.dodge=2))+
+        geom_hline(yintercept=4.4, alpha = 0.3, linetype = "dashed") +
+      facet_grid(model ~ N_fac) 
+
+#Saves the image
+ggsave("~/MAIHDA/Figures/True_error_20.png", plot= last_plot(), dpi=300, width = 7.3, height = 3.25, units = "in", device = "png")
+```
+
 
 SE disag
 ```{r}
@@ -255,7 +304,7 @@ labs(y="Mean True Error",color="Total sample \nsize", title = "Compound plot (N_
   #set the y-axis scale
   scale_y_continuous(limits=c(-60,60)) 
 
-ggsave("~/MAIHDA/Figures/Score_compound_BW.png", plot= last_plot(), dpi=300, width = 11, height = 6, units = "in", device = "png")
+ggsave("~/MAIHDA/Figures/Score_compound_BW.png", plot= last_plot(), dpi=300, width = 8.5, height = 9.5, units = "in", device = "png")
 ```
 
 Difference from true score (mean)
