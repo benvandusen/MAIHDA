@@ -167,9 +167,9 @@ est <- get.est %>% group_by(group) %>%
                             LCL = Q - 1.96*sqrt(T), 
                             UCL = Q + 1.96*sqrt(T),
                             SE = sqrt(T)) %>%
-  mutate(CG = word(group, 1), #This makes a new variable called "Race" and it uses the first word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
-         Race = word(group, 2), #This makes a new variable called "Gender" and it uses the second word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
-         Gender = word(group, 3) #This makes a new variable called "Degree" and it uses the third word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
+  mutate(CG = word(group, 1), #This makes a new variable called "CG" and it uses the first word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
+         Race = word(group, 2), #This makes a new variable called "Race" and it uses the second word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
+         Gender = word(group, 3) #This makes a new variable called "Gender" and it uses the third word in the "group" variable for its values. You'll need to make sure this makes sense for your data.
 )
 return <- est}
 ```
