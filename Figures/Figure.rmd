@@ -19,13 +19,6 @@ Load the final model
 ```{r}
 load("~/MAIHDA/Evaluation/eval_df.rda")
 load("~/MAIHDA/Evaluation/sum_eval_df.rda")
-
-eval_df <- eval_df %>%
-  filter(model != "Bay.") %>%
-  mutate(model = ifelse(model=="Freq.","Fixed effect","MAIHDA"),
-         model = factor(model, levels = c("Fixed effect", "MAIHDA")))
-
-
 ```
 
 
@@ -183,11 +176,11 @@ load("~/MAIHDA/Evaluation/SD_table.rda")
 #          model = factor(model, levels = c("Fixed effect", "MAIHDA")))
 
 SD_table <- SD_table %>%
-  mutate(N_fac = factor(ifelse(N_fac==500,"Total Sample = 500","Total Sample = 1000"), levels=c("Total Sample = 500","Total Sample = 1000")),
-         model = ifelse(model=="Traditional","Fixed effect","MAIHDA"),
-         model = factor(model, levels = c("Fixed effect", "MAIHDA")))
+  mutate(N_fac = case_match(N_fac, "500" ~ "Total Sample = 500", "1000" ~ "Total Sample = 1000", "5000" ~ "Total Sample = 5000"),
+         N_fac = factor(N_fac, levels=c("Total Sample = 500","Total Sample = 1000", "Total Sample = 5000")),
+         model = factor(model, levels = c("Fixed Effect", "MAIHDA")))
 
-ggplot(data=filter(SD_table), aes(x=as.factor(N_groups), y=mean_abs)) +
+ggplot(data=filter(SD_table), aes(x=as.factor(N_groups), y=mean)) +
 
   geom_point() +
   # geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.0) + 
@@ -210,7 +203,7 @@ ggsave("~/MAIHDA/Figures/True_error_20.png", plot= last_plot(), dpi=300, width =
 
 SE disag
 ```{r}
-ggplot(data=eval_df, aes(x=N_groups, y=SE, color=N_fac)) +
+ggplot(data=eval_df %>% filter(N_fac==500), aes(x=N_groups, y=SE, color=N_fac)) +
   geom_jitter(shape = 19,size=.05,  alpha=0.3, width=0.2) + 
    guides(colour = guide_legend(override.aes = list(size=5, alpha=1))) +
   theme(legend.position = "right",  axis.text.x=element_text(angle=0) , axis.ticks.x=element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"),text = element_text(size=16, color = "black")) +
