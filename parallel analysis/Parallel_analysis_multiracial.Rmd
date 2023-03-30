@@ -122,7 +122,7 @@ posterior <- posterior %>%
 
 #pretest
 Estimates <- posterior %>% 
-  mutate(#Asian
+  mutate(#Asian 1, 3, 3, 7
     "CG Asian men" = Asian, 
          "CG Asian women" = Asian + 
           women + women_Asian,
@@ -131,115 +131,87 @@ Estimates <- posterior %>%
           "FG Asian women" = Asian +
            women + women_Asian +
            FG + women_FG + women_Asian_FG + Asian_FG ,
-    #Asian Black
+    #Asian Black 3, 7, 7, 15
     "CG Asian Black men" = Asian + Black + Asian_Black, 
          "CG Asian Black women" = Asian + Black + Asian_Black + 
           women + women_Asian + women_Black + women_Asian_Black,
           "FG Asian Black men" = Asian + Asian_Black +
             FG + Black + Black_FG + Asian_FG + Asian_Black_FG,
-          "FG Asian Black women" = Intercept +
-           Black + women + women_Black +
-           FG + Black_FG + women_FG + women_Black_FG,
-    #Asian Hispanic
-         "CG Asian Hispanic men" = Intercept +
-           Hispanic,
-         "CG Asian Hispanic women" = Intercept +
-           Hispanic + women + women_Hispanic,
-         "FG Asian Hispanic men" = Intercept +
-           Hispanic +
-           FG + Hispanic_FG,
-         "FG Asian Hispanic women" = Intercept +
-           Hispanic + women + women_Hispanic +
-           FG + Hispanic_FG + women_FG + women_Hispanic_FG,
-    #Asian
-    "CG Asian men" = Intercept, 
-         "CG Asian women" = Intercept + 
-          women,
-          "FG Asian men" = Intercept + 
-            FG,
-          "FG Asian women" = Intercept +
-           women +
-           FG + women_FG,
-        #Asian White
-         "CG Asian White men" = Intercept +
-           White,
-         "CG Asian White women" = Intercept +
-           White + women + women_White,
-         "FG Asian White men" = Intercept +
-           White +
-           FG + White_FG,
-         "FG Asian White women" = Intercept +
-           White + women + women_White +
-           FG + White_FG + women_FG + women_White_FG,
-    #Black
-    "CG Black men" = Intercept +
-           Black,
-         "CG Black women" = Intercept +
-           Black + women + women_Black,
-         "FG Black men" = Intercept +
-           Black +
-           FG + Black_FG,
-         "FG Black women" = Intercept +
-           Black + women + women_Black +
-           FG + Black_FG + women_FG + women_Black_FG,
-       #Black Hispanic
-    "CG Black Hispanic men" = Intercept +
-           Black + Hispanic,
-         "CG Black Hispanic women" = Intercept +
-           Black + women + women_Black + Hispanic + women_Hispanic,
-         "FG Black Hispanic men" = Intercept +
-           Black + Hispanic +
-           FG + Black_FG + Hispanic_FG,
-         "FG Black Hispanic women" = Intercept +
-           Black + Hispanic + women + women_Black + women_Hispanic +
-           FG + Black_FG + Hispanic_FG + women_FG + women_Black_FG + women_Hispanic_FG,
-      #Black White
-        "CG Black White men" = Intercept +
-           Black + White,
-         "CG Black White women" = Intercept +
-           Black + women + women_Black + White + women_White,
-         "FG Black White men" = Intercept +
-           Black + White +
-           FG + Black_FG + White_FG,
-         "FG Black White women" = Intercept +
-           Black + White + women + women_Black + women_White +
-           FG + Black_FG + White_FG + women_FG + women_Black_FG + women_White_FG,
-    # #Hispanic
-         "CG Hispanic men" = Intercept +
-           Hispanic,
-         "CG Hispanic women" = Intercept +
-           Hispanic + women + women_Hispanic,
-         "FG Hispanic men" = Intercept +
-           Hispanic +
-           FG + Hispanic_FG,
-         "FG Hispanic women" = Intercept +
-           Hispanic + women + women_Hispanic +
-           FG + Hispanic_FG + women_FG + women_Hispanic_FG,
-    #     #White
-         "CG White men" = Intercept +
-           White,
-         "CG White women" = Intercept +
-           White + women + women_White,
-         "FG White men" = Intercept +
-           White +
-           FG + White_FG,
-         "FG White women" = Intercept +
-           White + women + women_White +
-           FG + White_FG + women_FG + women_White_FG,
-    #      White Hispanic
-             "CG White Hispanic men" = Intercept +
-           White + Hispanic + Hispanic_White,
-         "CG White Hispanic women" = Intercept +
-           White + Hispanic + Hispanic_White +
-               women + women_White + women_Hispanic + women_Hispanic_White,
-         "FG White Hispanic men" = Intercept +
-           White + Hispanic + Hispanic_White +
-           FG + White_FG + Hispanic_FG + Hispanic_White_FG,
-         "FG White Hispanic women" = Intercept +
-           White + Hispanic + Hispanic_White +
-               women + women_White + women_Hispanic + women_Hispanic_White +
-               FG + White_FG + Hispanic_FG + Hispanic_White_FG +
-               women_FG + women_White_FG + women_Hispanic_FG + women_Hispanic_White_FG
+          "FG Asian Black women" = Asian + Black + Asian_Black + 
+      women + women_Black + women_Asian + women_Asian_Black +
+           FG + Asian_FG + Black_FG + women_FG + women_Black_FG + Asian_Black_FG + women_Asian_FG + women_Asian_Black_FG,
+    #Asian Hispanic 3, 7, 7, 15
+    "CG Asian Hispanic men" = Asian + Hispanic + Asian_Hispanic, 
+         "CG Asian Hispanic women" = Asian + Hispanic + Asian_Hispanic + 
+          women + women_Asian + women_Hispanic + women_Asian_Hispanic,
+          "FG Asian Hispanic men" = Asian + Asian_Hispanic +
+            FG + Hispanic + Hispanic_FG + Asian_FG + Asian_Hispanic_FG,
+          "FG Asian Hispanic women" = Asian + Hispanic + Asian_Hispanic + 
+      women + women_Hispanic + women_Asian + women_Asian_Hispanic +
+           FG + Asian_FG + Hispanic_FG + women_FG + women_Hispanic_FG + Asian_Hispanic_FG + women_Asian_FG + women_Asian_Hispanic_FG,
+        #Asian White 3, 7, 7, 15
+    "CG Asian White men" = Asian + White + Asian_White, 
+         "CG Asian White women" = Asian + White + Asian_White + 
+          women + women_Asian + women_White + women_Asian_White,
+          "FG Asian White men" = Asian + Asian_White +
+            FG + White + White_FG + Asian_FG + Asian_White_FG,
+          "FG Asian White women" = Asian + White + Asian_White + 
+      women + women_White + women_Asian + women_Asian_White +
+           FG + Asian_FG + White_FG + women_FG + women_White_FG + Asian_White_FG + women_Asian_FG + women_Asian_White_FG,
+    #Black 1, 3, 3, 7
+    "CG Black men" = Black, 
+         "CG Black women" = Black + 
+          women + women_Black,
+          "FG Black men" = Black + 
+            FG + Black_FG,
+          "FG Black women" = Black +
+           women + women_Black +
+           FG + women_FG + women_Black_FG + Black_FG ,
+       #Black Hispanic 3, 7, 7, 15
+    "CG Black Hispanic men" = Black + Hispanic + Black_Hispanic, 
+         "CG Black Hispanic women" = Black + Hispanic + Black_Hispanic + 
+          women + women_Black + women_Hispanic + women_Black_Hispanic,
+          "FG Black Hispanic men" = Black + Black_Hispanic +
+            FG + Hispanic + Hispanic_FG + Black_FG + Black_Hispanic_FG,
+          "FG Black Hispanic women" = Black + Hispanic + Black_Hispanic + 
+      women + women_Hispanic + women_Black + women_Black_Hispanic +
+           FG + Black_FG + Hispanic_FG + women_FG + women_Hispanic_FG + Black_Hispanic_FG + women_Black_FG + women_Black_Hispanic_FG,
+      #Black White 3, 7, 7, 15
+    "CG Black White men" = Black + White + Black_White, 
+         "CG Black White women" = Black + White + Black_White + 
+          women + women_Black + women_White + women_Black_White,
+          "FG Black White men" = Black + Black_White +
+            FG + White + White_FG + Black_FG + Black_White_FG,
+          "FG Black White women" = Black + White + Black_White + 
+      women + women_White + women_Black + women_Black_White +
+           FG + Black_FG + White_FG + women_FG + women_White_FG + Black_White_FG + women_Black_FG + women_Black_White_FG,
+    # #Hispanic 1, 3, 3, 7
+    "CG Hispanic men" = Hispanic, 
+         "CG Hispanic women" = Hispanic + 
+          women + women_Hispanic,
+          "FG Hispanic men" = Hispanic + 
+            FG + Hispanic_FG,
+          "FG Hispanic women" = Hispanic +
+           women + women_Hispanic +
+           FG + women_FG + women_Hispanic_FG + Hispanic_FG ,
+    #     #White 1, 3, 3, 7
+    "CG White men" = White, 
+         "CG White women" = White + 
+          women + women_White,
+          "FG White men" = White + 
+            FG + White_FG,
+          "FG White women" = White +
+           women + women_White +
+           FG + women_FG + women_White_FG + White_FG ,
+    #      White Hispanic 3, 7, 7, 15
+    "CG White Hispanic men" = White + Hispanic + Hispanic_White, 
+         "CG White Hispanic women" = White + Hispanic + Hispanic_White + 
+          women + women_White + women_Hispanic + women_Hispanic_White,
+          "FG White Hispanic men" = White + Hispanic_White +
+            FG + Hispanic + Hispanic_FG + White_FG + Hispanic_White_FG,
+          "FG White Hispanic women" = White + Hispanic + Hispanic_White + 
+      women + women_Hispanic + women_White + women_Hispanic_White +
+           FG + White_FG + Hispanic_FG + women_FG + women_Hispanic_FG + Hispanic_White_FG + women_White_FG + women_Hispanic_White_FG,
          ) %>% 
   pivot_longer("CG Asian men":"FG White Hispanic women",
                names_to = "soc_id") %>%
