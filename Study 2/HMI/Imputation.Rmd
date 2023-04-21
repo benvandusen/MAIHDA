@@ -1,0 +1,192 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(hmi)
+library(mice)
+library(miceadds)
+library(tidyverse)
+library('fastDummies')
+```
+
+```{r}
+load("~/STEM_Equity/Data/fci_1_22_df_for MI and Bias.Rdata")
+load("~/STEM_Equity/Data/fmce_1_22_df_for_research.Rdata")
+load("~/STEM_Equity/Data/imca_1_22_df_for_research.Rdata")
+load("~/STEM_Equity/Data/cci_1_22_df_for_research.Rdata")
+load("~/STEM_Equity/course_institution_df.Rdata")
+```
+
+Filter courses out
+```{r}
+
+fci_1_22_df <- fci_1_22_df %>% filter( math == "calculus",
+                                        used_collaborative_learning == "Y" | 
+                                         course_use_las=="Y" |
+                                         course_use_las=="1") %>%
+    mutate(level = as.character(level))
+
+str(fci_1_22_df$level)
+  xtabs(~math + level,fci_1_22_df)
+  
+
+  fmce_1_22_df <- fmce_1_22_df %>% filter( level== "1" & math == "calculus",
+                                        used_collaborative_learning == "Y" | 
+                                         course_use_las=="Y" |
+                                         course_use_las=="1") %>%
+  mutate(level = as.character(level))
+  
+  xtabs(~math + level,fmce_1_22_df)
+
+  
+
+cci_1_22_df <- cci_1_22_df %>% mutate(for_majors = as.character(for_majors)) %>%
+  filter(for_majors == 1)
+imca_1_22_df <- imca_1_22_df %>% mutate(level = as.character(level)) %>%
+  filter(for_majors == "Yes")
+```
+bind 
+
+```{r}
+data_df <- bind_rows(cci_1_22_df,  imca_1_22_df, fci_1_22_df,  fmce_1_22_df) 
+```
+
+
+l_join for institution id (make sure observations stay the same)
+
+```{r}
+
+small_df <- data_df %>% 
+  select(student_id, course_id, assessment_code, asian, black, female, male, math, first_time, hispanic, parent_degree, white, pre_score, post_score)
+
+  
+
+
+c_i <- unique(course_institution_df)
+c_i$institution_id <- ifelse(c_i$institution_id==153,11,c_i$institution_id)
+c_i <- unique(c_i)
+
+#n_occur <- data.frame(table(c_i$course_id))
+#test <- n_occur[n_occur$Freq > 1,]
+
+small_df <-  left_join(small_df,unique(c_i))
+
+dat_long <- small_df %>% 
+  pivot_longer(cols=c(pre_score,post_score),names_to="test",values_to = "score")
+
+dat_long <- dat_long %>%
+    rename(men= male) %>%
+  rename(women = female) %>%
+    rename(CG = parent_degree) %>%
+  mutate(test=ifelse(test== "pre_score",0,1),
+         student_id = as.numeric(student_id),
+         retake = ifelse(first_time==1,0,1),
+         first_time = NULL,
+         CG = CG %>% 
+  na_if("I do not know") %>%
+  na_if("No Answer") %>%
+  na_if("N/A"),
+    CG = ifelse(CG== "Yes",1,0),
+  FG = ifelse(CG==1,0,1),
+  white_hispanic_men = white*hispanic*men,
+  FG_asian_men = asian*men*FG,
+  FG_black_men = black*men*FG,
+  FG_hispanic_men = hispanic*men*FG,
+  FG_white_hispanic_men = white*hispanic*men*FG,
+  asian_women = asian*women,
+  black_women = black*women,
+  hispanic_women = hispanic*women,
+  white_women = white*women,
+  white_hispanic_women = white*hispanic*women,
+  FG_asian_women = asian*women*FG,
+  FG_black_women = black*women*FG,
+  FG_hispanic_women = hispanic*women*FG,
+  FG_white_women = white*women*FG,
+  FG_white_hispanic_women = white*hispanic*women*FG,
+  gender_other = ifelse(men==0 & women==0,1,0),
+  race_other = ifelse(white==0 & black==0 & asian==0 & hispanic==0,1,0),
+      FCI=ifelse(assessment_code=="FCI",1,0),
+           CCI=ifelse(assessment_code=="CCI",1,0),
+           IMCA=ifelse(assessment_code=="IMCA",1,0),
+           FMCE=ifelse(assessment_code=="FMCE",1,0),
+           BEMA=ifelse(assessment_code=="BEMA",1,0),
+           CSEM=ifelse(assessment_code=="CSEM",1,0)
+         )
+```
+
+
+#https://www.r-bloggers.com/2019/01/multiple-imputation-for-three-level-and-cross-classified-data/
+#𝑥  and 𝑦 are measured at level 1, 𝑧 at level 2, and 𝑤 at level 3
+
+# predictor matrix and imputation method (defaults)
+```{r}
+predMatrix <- quickpred(dat_long, exclude=c("student_id","course_id","institution_id"), include=c("asian_men", "black_men", "hispanic_men", "white_hispanic_men", "retake", "white_men", "FG", "asian_women", "asian_women", "black_women", "hispanic_women", "white_women", "white_hispanic_women", "FG_asian_men", "FG_black_men", "FG_hispanic_men", "FG_white_hispanic_men", "FG_asian_women", "FG_black_women", "FG_hispanic_women", "FG_white_women", "FG_white_hispanic_women",  "gender_other", "race_other", "FCI", "FMCE","CCI","BEMA", "CSEM", "IMCA", "math",  "score"))
+#predMatrix[, 1:13] <- 0
+#predMatrix[3:12, 13] <- 1
+#predMatrix[, c("course_id","student_id")] <- 0
+#predMatrix[, c("course_id")] <- -2
+```
+
+#predMatrix <- make.predictorMatrix(data = dat)
+```{r}
+impMethod <- make.method(data = dat_long, defaultMethod = "pmm")
+```
+
+
+```{r}
+# ... specify levels of higher-level variables
+level <- character(ncol(dat_long))
+names(level) <- colnames(dat_long)
+
+#level["w"] <- "school"
+level[c("first_time","FG", "FG_asian_men", "FG_black_men", "FG_hispanic_men", "FG_white_hispanic_men", "FG_asian_women", "FG_black_women", "FG_hispanic_women", "FG_white_women", "FG_white_hispanic_women")] <- "student_id"
+```
+
+```{r}
+# ... specify cluster indicators (as list)
+cluster <- list()
+
+cluster[["score"]] <- c("student_id", "course_id","institution_id")
+cluster[["FG"]] <- c("course_id","institution_id")
+cluster[["FG_asian_men"]] <- c("course_id","institution_id")
+cluster[["FG_black_men"]] <- c("course_id","institution_id")
+cluster[["FG_hispanic_men"]] <- c("course_id","institution_id")
+cluster[["FG_white_hispanic_men"]] <- c("course_id","institution_id")
+cluster[["FG_asian_women"]] <- c("course_id","institution_id")
+cluster[["FG_black_women"]] <- c("course_id","institution_id")
+cluster[["FG_hispanic_women"]] <- c("course_id","institution_id")
+cluster[["FG_white_women"]] <- c("course_id","institution_id")
+cluster[["FG_white_hispanic_women"]] <- c("course_id","institution_id")
+cluster[["first_time"]] <- c("course_id","institution_id")
+
+```
+
+
+# Impute
+```{r}
+imp <- mice(dat_long, method = impMethod, predictorMatrix = predMatrix, levels_id = cluster, variables_levels = level, m = 10)
+summary(complete(imp))
+save(imp, file="imp.rda")
+
+#View(complete(imp))
+```
+Look at what we got
+```{r}
+temp<-complete(imp, action='long', include=TRUE)
+```
+
+#view convergence
+```{r}
+load("~/MI worked example/hmi_dat(imp.mult)")
+view(complete(imp.mult))
+summary(complete(imp.mult))
+plot(imp.mult)
+```
+
+#save plot of convergence
+```{r}
+pdf("~/MI worked example/MI_plots.pdf")
+plot(imp.mult)
+dev.off() 
+densityplot(imp.mult)
+stripplot(imp.mult)
+```
+

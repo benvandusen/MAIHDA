@@ -1,0 +1,152 @@
+---
+title: "Descriptives"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(mice)
+```
+
+Load the data
+```{r}
+load("/Users/bvd/lasso_march_23_df.Rdata")
+load("/Users/bvd/MAIHDA/Study 2/course_institution_df.Rdata")
+```
+
+
+```{r}
+df <- lasso_march_23_df %>% 
+  filter(assessment_code=="FCI",
+         math=="calculus",
+         used_collaborative_learning == "Y" | 
+                                         course_use_las=="Y" |
+                                         course_use_las=="1")%>%
+    mutate(level = as.character(level),
+           institution_id = as.numeric(institution_id))
+
+c_i <- unique(course_institution_df)
+c_i$institution_id <- ifelse(c_i$institution_id==153,11,c_i$institution_id)
+c_i <- unique(c_i)
+
+df <-  left_join(df,unique(c_i))
+```
+
+
+```{r}
+df <- df %>%
+  mutate(Asian=ifelse(asian==1,"Asian",""),
+         Black=ifelse(black==1,"Black",""),
+         Hispanic=ifelse(hispanic==1,"Hispanic",""),
+         White=ifelse(white==1,"White",""),
+         Genderqueer=ifelse(transgender==1 | transman==1 | transwoman==1 | genderqueer_nonconforming==1,"transgender",""),
+         parent_degree = parent_degree %>% 
+  na_if("I do not know") %>%
+  na_if("No Answer") %>%
+  na_if("N/A"),
+         FG=ifelse(parent_degree=="Yes"|is.na(parent_degree)==T,"","first-generation"),
+         CG=ifelse(parent_degree=="No" | is.na(parent_degree)==T,"","continuing-generation"),
+         Man=ifelse(male==1,"man",""),
+         HPI=ifelse(hawaiian_or_other_pacific_islander==1,"Hawaiian or other Pacific islander",""),
+         Woman=ifelse(female==1,"woman",""),
+         ANAI=ifelse(american_indian==1,"Alaskan Native or American Indian",""),
+         Gender = as.factor(paste(Woman, Man, Genderqueer,sep = "_")),
+         Race = as.factor(paste(Asian, Black, Hispanic, White, HPI, ANAI, sep = "_")),
+         FG_CG_status = as.factor(paste(FG,CG,sep = "_")),
+         soc_id = as.factor(paste(Asian, Black, Hispanic, White, Genderqueer, FG, CG, Man, HPI,Woman, ANAI,sep = "_")))
+
+df_long <- pivot_longer(df, cols=c("pre_score","post_score"),names_to = "test", values_to = "score" )
+df_long$test <- as.factor(df_long$test)
+```
+
+calculate the data counts
+```{r pressure, echo=FALSE}
+total_count <- df_long %>% 
+  summarize(Students= length(unique(student_id)),
+            Courses = length(unique(course_id)),
+            Institutions = length(unique(institution_id))) %>%
+  mutate(assessment_code="Total")
+
+total_count <- total_count[,c("assessment_code","Students","Courses","Institutions")]
+
+write.csv(total_count, "total_count.csv")
+```
+
+
+calculate the descriptives
+```{r pressure, echo=FALSE}
+desc_any <- df_long %>% 
+  group_by(Race, Gender, FG_CG_status) %>%
+  summarize(N= sum(!is.na(score)),
+            Score = mean(score, na.rm=TRUE),
+            SD = sd(score, na.rm=TRUE)) 
+
+desc <- df_long %>% 
+  group_by(Race, Gender, FG_CG_status, test) %>%
+  summarize(N= sum(!is.na(score)),
+            Score = mean(score, na.rm=TRUE),
+            SD = sd(score, na.rm=TRUE)) 
+
+desc_10 <- desc %>%
+  filter(N>9,
+         Gender!="__",
+         Race!="_____",
+         FG_CG_status!="_")
+
+desc_10_pre <- desc_10 %>% filter(test=="pre_score")
+desc_10_post <- desc_10 %>% filter(test=="post_score")
+
+desc_20 <- desc %>%
+  filter(N>19,
+         Gender!="__",
+         Race!="_____",
+         FG_CG_status!="_")
+
+desc_20_pre <- desc_20 %>% filter(test=="pre_score")
+desc_20_post <- desc_20 %>% filter(test=="post_score")
+
+write.csv(desc_stat_MI, "desc_stat_MI.csv")
+
+desc_stat_instrument_MI <- df %>% 
+  filter(assessment_code=="CCI" | assessment_code=="IMCA"| assessment_code=="FCI", Race!="Other") %>%
+  group_by(assessment_code, test) %>%
+  summarize(N= sum(!is.na(score)),
+            Score = mean(score, na.rm=TRUE),
+            SD = sd(score, na.rm=TRUE)) 
+
+write.csv(desc_stat_instrument_MI, "desc_stat_instrument_MI.csv")
+
+desc_stat_noMI <- data_df %>% filter(CG=="Yes" | CG=="No") %>%
+  filter(assessment_code=="CCI" | assessment_code=="IMCA"| assessment_code=="FCI", Race!="Other") %>%
+  group_by(assessment_code, Race, CG, men, test) %>%
+  summarize(N= sum(!is.na(score)),
+            Score = mean(score, na.rm=TRUE),
+            SD = sd(score, na.rm=TRUE)) 
+
+write.csv(desc_stat_noMI, "desc_stat_noMI.csv")
+
+desc_stat_instrument_noMI <- data_df %>% 
+  filter(assessment_code=="CCI" | assessment_code=="IMCA"| assessment_code=="FCI", Race!="Other") %>%
+  group_by(assessment_code, test) %>%
+  summarize(N= sum(!is.na(score)),
+            Score = mean(score, na.rm=TRUE),
+            SD = sd(score, na.rm=TRUE)) 
+
+write.csv(desc_stat_instrument_noMI, "desc_stat_instrument_noMI.csv")
+
+overall_desc_stat_MI <- data_df %>%
+  filter(assessment_code=="CCI" | assessment_code=="IMCA"| assessment_code=="FCI", Race!="Other") %>%
+  group_by(assessment_code,test) %>%
+  summarize(N= sum(!is.na(score)),
+            Score = mean(score, na.rm=TRUE),
+            SD = sd(score, na.rm=TRUE)) 
+
+write.csv(overall_desc_stat_MI, "overall_desc_stat_noMI.csv")
+
+```
+
+MI data descriptives
+```{r}
+
+```
+

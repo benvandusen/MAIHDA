@@ -1,0 +1,278 @@
+---
+title: "Comparing filtering"
+author: "Jayson Nissen"
+date: "9/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(MuMIn)
+library(mitml)
+library(mice)
+library(rstan)
+library(brms)
+```
+
+
+Create time series data set
+
+
+```{r}
+load("~/STEEquity/Data cleaning and MI/imp.rda")
+
+load("~/MAIHDA/Study 2/imp.rda")
+
+```
+
+Time series for mid
+```{r message=FALSE, warning=FALSE}
+temp<-complete(imp, action='long', include=TRUE) #converts file type
+
+temp <- temp %>%
+          filter(math=="calculus", FCI==1) %>%
+    select(asian, course_id, black, CG, institution_id, math, race_other, gender_other, retake, score, student_id, test, white, women, hispanic, FCI, CCI, IMCA, FMCE, BEMA, CSEM,.imp) %>%
+ mutate(FG=ifelse(CG==1,0,1),
+        cluster = (10000000 + 1000000*(test) + 100000*(asian) +10000*(black) +1000*(hispanic) +100*(white) + 10*(women) + 1*(FG)))
+
+MIdata <- as.mids(temp)
+
+save(MIdata, file="MIdata.rda")
+```
+
+Load the data
+```{r}
+# load("~/STEEquity/Modeling/Bays/MIdata.rda")
+load("~/MAIHDA/Study 2/MIdata.rda")
+```
+
+Cut down on size
+```{r}
+temp <- complete(MIdata,action='long', include=TRUE)
+
+temp <- temp %>%
+  filter(.imp==0 | .imp==1 | .imp==2,
+         .id<3000)
+  
+
+small_df <- as.mids(temp)
+
+temp <- complete(MIdata,action='long', include=TRUE)
+
+small_df_0 <- temp %>%
+  filter(.imp==0,
+         .id<3000)
+
+small_df_1 <- temp %>%
+  filter(.imp==1,
+         .id<3000)
+
+small_df_2 <- temp %>%
+  filter(.imp==2,
+         .id<3000)
+
+bad_cluster_1 <- anti_join(small_df_1 %>% select(cluster), small_df_2  %>% select(cluster))
+
+bad_cluster_2 <- anti_join(small_df_2 %>% select(cluster), small_df_1  %>% select(cluster))
+
+bad_cluster <- rbind(bad_cluster_1,bad_cluster_2)
+
+test_1 <- small_df_1 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+
+test_2 <- small_df_2 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+
+temp <- rbind(small_df_0,test_1,test_2)
+
+clean_df_test <- as.mids(temp)
+```
+
+Do it for the whole data
+```{r}
+temp <- complete(MIdata,action='long', include=TRUE)
+
+small_df_0 <- temp %>%
+  filter(.imp==0)
+small_df_1 <- temp %>%
+  filter(.imp==1)
+small_df_2 <- temp %>%
+  filter(.imp==2)
+small_df_3 <- temp %>%
+  filter(.imp==3)
+small_df_4 <- temp %>%
+  filter(.imp==4)
+small_df_5 <- temp %>%
+  filter(.imp==5)
+small_df_6 <- temp %>%
+  filter(.imp==6)
+small_df_7 <- temp %>%
+  filter(.imp==7)
+small_df_8 <- temp %>%
+  filter(.imp==8)
+small_df_9 <- temp %>%
+  filter(.imp==9)
+
+bc_12 <- anti_join(small_df_1 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_13 <- anti_join(small_df_1 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_14 <- anti_join(small_df_1 %>% select(cluster), small_df_4  %>% select(cluster))
+bc_15 <- anti_join(small_df_1 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_16 <- anti_join(small_df_1 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_17 <- anti_join(small_df_1 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_18 <- anti_join(small_df_1 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_19 <- anti_join(small_df_1 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_21 <- anti_join(small_df_2 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_23 <- anti_join(small_df_2 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_24 <- anti_join(small_df_2 %>% select(cluster), small_df_4  %>% select(cluster))
+bc_25 <- anti_join(small_df_2 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_26 <- anti_join(small_df_2 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_27 <- anti_join(small_df_2 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_28 <- anti_join(small_df_2 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_29 <- anti_join(small_df_2 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_31 <- anti_join(small_df_3 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_32 <- anti_join(small_df_3 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_34 <- anti_join(small_df_3 %>% select(cluster), small_df_4  %>% select(cluster))
+bc_35 <- anti_join(small_df_3 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_36 <- anti_join(small_df_3 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_37 <- anti_join(small_df_3 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_38 <- anti_join(small_df_3 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_39 <- anti_join(small_df_3 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_41 <- anti_join(small_df_4 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_42 <- anti_join(small_df_4 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_43 <- anti_join(small_df_4 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_45 <- anti_join(small_df_4 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_46 <- anti_join(small_df_4 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_47 <- anti_join(small_df_4 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_48 <- anti_join(small_df_4 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_49 <- anti_join(small_df_4 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_51 <- anti_join(small_df_5 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_52 <- anti_join(small_df_5 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_53 <- anti_join(small_df_5 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_54 <- anti_join(small_df_5 %>% select(cluster), small_df_4  %>% select(cluster))
+bc_56 <- anti_join(small_df_5 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_57 <- anti_join(small_df_5 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_58 <- anti_join(small_df_5 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_59 <- anti_join(small_df_5 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_61 <- anti_join(small_df_6 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_62 <- anti_join(small_df_6 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_63 <- anti_join(small_df_6 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_64 <- anti_join(small_df_6 %>% select(cluster), small_df_4  %>% select(cluster))
+bc_65 <- anti_join(small_df_6 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_67 <- anti_join(small_df_6 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_68 <- anti_join(small_df_6 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_69 <- anti_join(small_df_6 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_71 <- anti_join(small_df_7 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_72 <- anti_join(small_df_7 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_73 <- anti_join(small_df_7 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_75 <- anti_join(small_df_7 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_76 <- anti_join(small_df_7 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_74 <- anti_join(small_df_7 %>% select(cluster), small_df_4  %>% select(cluster))
+bc_78 <- anti_join(small_df_7 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_79 <- anti_join(small_df_7 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_81 <- anti_join(small_df_8 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_82 <- anti_join(small_df_8 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_83 <- anti_join(small_df_8 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_85 <- anti_join(small_df_8 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_86 <- anti_join(small_df_8 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_87 <- anti_join(small_df_8 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_84 <- anti_join(small_df_8 %>% select(cluster), small_df_4  %>% select(cluster))
+bc_89 <- anti_join(small_df_8 %>% select(cluster), small_df_9  %>% select(cluster))
+
+bc_91 <- anti_join(small_df_9 %>% select(cluster), small_df_1  %>% select(cluster))
+bc_92 <- anti_join(small_df_9 %>% select(cluster), small_df_2  %>% select(cluster))
+bc_93 <- anti_join(small_df_9 %>% select(cluster), small_df_3  %>% select(cluster))
+bc_95 <- anti_join(small_df_9 %>% select(cluster), small_df_5  %>% select(cluster))
+bc_96 <- anti_join(small_df_9 %>% select(cluster), small_df_6  %>% select(cluster))
+bc_97 <- anti_join(small_df_9 %>% select(cluster), small_df_7  %>% select(cluster))
+bc_98 <- anti_join(small_df_9 %>% select(cluster), small_df_8  %>% select(cluster))
+bc_94 <- anti_join(small_df_9 %>% select(cluster), small_df_4  %>% select(cluster))
+
+bad_cluster <- rbind(bc_12,bc_13,bc_14,bc_15,bc_16,bc_17,bc_18,bc_19,
+                     bc_21,bc_23,bc_24,bc_25,bc_26,bc_27,bc_28,bc_29,
+                     bc_31,bc_32,bc_34,bc_35,bc_36,bc_37,bc_38,bc_39,
+                     bc_41,bc_42,bc_43,bc_45,bc_46,bc_47,bc_48,bc_49,
+                     bc_51,bc_52,bc_53,bc_54,bc_56,bc_57,bc_58,bc_59,
+                     bc_61,bc_62,bc_63,bc_64,bc_65,bc_67,bc_68,bc_69,
+                     bc_71,bc_72,bc_73,bc_74,bc_75,bc_76,bc_78,bc_79,
+                     bc_81,bc_82,bc_83,bc_84,bc_85,bc_86,bc_87,bc_89,
+                     bc_91,bc_92,bc_93,bc_94,bc_95,bc_96,bc_97,bc_98)
+
+small_df_0 <- small_df_0 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_1 <- small_df_1 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_2 <- small_df_2 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_3 <- small_df_3 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_4 <- small_df_4 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_5 <- small_df_5 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_6 <- small_df_6 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_7 <- small_df_7 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_8 <- small_df_8 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+small_df_9 <- small_df_9 %>%
+  mutate(cluster = ifelse(cluster %in% bad_cluster$cluster,11101011,cluster))
+
+temp <- rbind(small_df_0,small_df_1,small_df_2,small_df_3,small_df_4,small_df_5,small_df_6,small_df_7,small_df_8,small_df_9)
+
+clean_df <- as.mids(temp)
+```
+
+
+Bayesian models
+```{r message=FALSE, warning=FALSE, include=FALSE}
+mod_m <- brm_multiple(score ~ 1 + gender_other + race_other + retake + test + FG + women + black + white + hispanic  + (1|course_id/student_id)  + (1|cluster), data = clean_df, seed=1, chains = 3, cores=8)
+
+save(mod_m, file="mod_m.rda")
+```
+
+Trouble shooting code. Don't run it
+<!-- Dataset 1 -->
+<!-- ```{r message=FALSE, warning=FALSE, include=FALSE} -->
+<!-- FCI_m_1 <- brm(score ~ 1 + gender_other + race_other + retake + test + FG + women + black + white + hispanic  + (1|course_id/student_id)  + (1|cluster), data = test_1, seed=1, chains = 3, cores=8) -->
+
+<!-- save(FCI_m_1, file="FCI_m_1.rda") -->
+<!-- ``` -->
+
+<!-- Dataset 2 -->
+<!-- ```{r message=FALSE, warning=FALSE, include=FALSE} -->
+<!-- FCI_m_2 <- brm(score ~ 1 + gender_other + race_other + retake + test + FG + women + black + white + hispanic  + (1|course_id/student_id)  + (1|cluster), data = test_2, seed=1, chains = 3, cores=8) -->
+
+<!-- save(FCI_m_2, file="FCI_m_2.rda") -->
+<!-- ``` -->
+
+<!-- Combine them -->
+<!-- ```{r} -->
+
+<!-- ``` -->
+
+
+<!-- Create my own function for brm_multiple -->
+<!-- ```{r} -->
+
+<!-- var_1 <- variables(FCI_m_1) -->
+<!-- var_2 <- variables(FCI_m_2) -->
+<!-- var_1_df <- as.data.frame(var_1) -->
+<!-- var_2_df <- as.data.frame(var_2) %>% -->
+<!--   rename(var_1=var_2) -->
+
+<!-- bad_var_1 <- anti_join(var_1_df,var_2_df) -->
+<!-- bad_var_2 <- anti_join(var_2_df,var_1_df) -->
+
+<!-- test <- lapply(c("var_1_df","var_2_df"), "[[", "fit") -->
+
+<!-- test <- combine_models(FCI_m_1, FCI_m_2, check_data = FALSE) -->
+<!-- ``` -->
